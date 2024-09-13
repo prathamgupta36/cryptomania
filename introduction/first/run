@@ -1,0 +1,65 @@
+#!/opt/pwn.college/python
+
+import random
+import time
+import hashlib
+
+
+def shuffle_reveal(flag):
+    print("Decoding flag...\n")
+    time.sleep(0.75)  
+    
+    revealed_flag = ['_'] * len(flag)
+    for i in range(len(flag)):
+        if flag[i] == '{' or flag[i] == '}' or flag[i] == '_':
+            revealed_flag[i] = flag[i]
+            print("".join(revealed_flag), end="\r")
+            time.sleep(0.1)
+            continue
+
+        for _ in range(10): 
+            revealed_flag[i] = random.choice('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789')
+            print("".join(revealed_flag), end="\r")
+            time.sleep(0.1)
+        
+        revealed_flag[i] = flag[i]
+        print("".join(revealed_flag), end="\r")
+        time.sleep(0.1)
+
+    print("\n")
+
+def load_flag():
+    with open("/flag", 'r') as f:
+        return f.read().strip()
+
+
+def main():
+    print("------------------------------------------")
+    print("Welcome to your journey of Cryptography!")
+    print("------------------------------------------")
+    time.sleep(0.20)
+    
+    print("Languages can be cryptic if you haven't learned it.")
+    print("For this challenge you need to give me the English for the last phrase from the description of this dojo.")
+    print("Hint: Use Google, books, or go to the library.")
+    print("\n")
+    time.sleep(0.2)
+    user_input = input("Your converted phrase: ")
+    
+    # Don't try to cheat by looking at the source code, I am trying to make you learn something here!
+    user_input = hashlib.sha256(user_input.encode()).hexdigest()
+
+
+    if user_input.strip() == '1fb6d052cff9925f1a910937e2f1899a7321a6139238d74a8815a8109b04cc28':
+        print("Good job! You have successfully converted the hex to bytes which looks like half the flag.")
+        time.sleep(0.2)
+        
+        flag = load_flag()
+        print("You have proved to be worthy! Here is your flag:")
+        shuffle_reveal(flag)
+        
+    else:
+        print("Incorrect! Try again.")
+
+if __name__ == "__main__":
+    main()
