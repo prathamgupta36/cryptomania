@@ -6,3 +6,5 @@ challenges:
     name: Language Barrier
   - id: hex
     name: Baby Steps
+  - id: caesarcipher
+    name: Roman Cryptography
