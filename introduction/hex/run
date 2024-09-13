@@ -1,0 +1,71 @@
+#!/opt/pwn.college/python
+
+import random
+import time
+
+def shuffle_reveal(flag):
+    print("Decoding flag...\n")
+    time.sleep(0.75)  
+    
+    revealed_flag = ['_'] * len(flag)
+    for i in range(len(flag)):
+        if flag[i] == '{' or flag[i] == '}' or flag[i] == '_':
+            revealed_flag[i] = flag[i]
+            print("".join(revealed_flag), end="\r")
+            time.sleep(0.1)
+            continue
+
+        for _ in range(10): 
+            revealed_flag[i] = random.choice('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789')
+            print("".join(revealed_flag), end="\r")
+            time.sleep(0.1)
+        
+        revealed_flag[i] = flag[i]
+        print("".join(revealed_flag), end="\r")
+        time.sleep(0.1)
+
+    print("\n")
+
+def load_flag():
+    with open("/flag", 'r') as f:
+        return f.read().strip()
+
+
+def main():
+    print("------------------------------------------")
+    print("Welcome to your journey of Cryptography!")
+    print("------------------------------------------")
+    time.sleep(0.20)
+    
+    print("We all have secrets and we want them safe so we hide them.")
+    print("One way to hide them is to use cryptography.")
+    print("\n")
+    time.sleep(0.2)
+    
+    print("I have hidden a secret from you which you can reveal if you follow my instructions.")
+    print("You will be given a hex and I want you to convert them to bytes.")
+    print("Hex is not a curse, it is a way to represent data.")
+    print("\n")
+    
+    time.sleep(0.2)
+    flag = load_flag()
+    midpoint = len(flag) // 2
+    first_half = flag[:midpoint]
+    hex_string = first_half.encode("utf-8").hex()
+    print("Hex: ", hex_string)
+    print("Convert these hex to bytes and I will check")
+    print("Hint: use the bytes.fromhex() function of python")
+    user_input = input("Your bytes: ")
+
+    if user_input.strip() == first_half:
+        print("Good job! You have successfully converted the hex to bytes which looks like half the flag.")
+        time.sleep(0.2)
+        
+        print("You have proved to be worthy! Here is your flag:")
+        shuffle_reveal(flag)
+        
+    else:
+        print("Incorrect! Try again.")
+
+if __name__ == "__main__":
+    main()
