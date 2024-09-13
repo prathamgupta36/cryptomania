@@ -8,3 +8,5 @@ challenges:
     name: Baby Steps
   - id: caesarcipher
     name: Roman Cryptography
+  - id: obscura
+    name: Obscura
