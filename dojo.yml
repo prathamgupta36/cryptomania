@@ -1,6 +1,6 @@
 id: cryptomania
 name: Crytpomania
-type: private
+type: public
 
 modules:
   - id: introduction
