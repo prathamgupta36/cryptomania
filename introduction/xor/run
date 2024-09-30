@@ -7,7 +7,6 @@ def run_script(script_path):
     """Run the specified Python script."""
     try:
         result = subprocess.run(['python3', script_path], check=True)
-        print(f"Script executed successfully with exit code {result.returncode}.")
     except subprocess.CalledProcessError as e:
         print(f"An error occurred while running the script: {e}")
 
