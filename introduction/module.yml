@@ -11,6 +11,4 @@ challenges:
   - id: obscura
     name: Obscura
   - id: xor
-    name: Xor
-    visibility:
-      start: "2029-08-21T10:30:00-07:00"
+    name: XOR
