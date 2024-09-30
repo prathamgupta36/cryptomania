@@ -1,0 +1,58 @@
+#!/opt/pwn.college/python
+
+import time
+import random
+
+def xor_encrypt(plaintext: str, key: str) -> str:
+    ciphertext = ''
+    key_len = len(key)
+    for i, char in enumerate(plaintext):
+        key_char = key[i % key_len] 
+        xor_char = chr(ord(char) ^ ord(key_char))
+        ciphertext += xor_char
+
+    return ciphertext
+
+def explain_xor():
+    print("------------------------------------------")
+    print("Welcome to your journey of Cryptography!")
+    print("------------------------------------------")
+    print("We are testing XOR in this challenge.")
+    print("------------------------------------------")
+    time.sleep(0.20)
+    print("XOR is a powerful operation used in cryptography.")
+    print("We are using a key that is a string, and each character in the key is XORed with the message in a loop.")
+    print("This adds complexity because it's no longer a simple one-byte XOR but rather a multi-byte cyclic key.")
+    print("You are going to recieve a ciphertext and you need to decrypt it.")
+    time.sleep(1)
+
+def xor_maker(plaintext: str, key: str, rounds: int = 3):
+    ciphertext = plaintext
+    for round_num in range(rounds):
+        new_ciphertext = ''
+        key_len = len(key)
+        for i, char in enumerate(ciphertext):
+            p_val = ord(char)
+            k_val = ord(key[i % key_len])
+            xor_val = p_val ^ k_val
+            xor_binary = format(xor_val, '08b')
+            new_ciphertext += chr(xor_val)
+            time.sleep(0.2)
+
+        ciphertext = new_ciphertext
+    
+    print(f"\Encrypted Ciphertext (Hex): {ciphertext.encode().hex()}")
+    return ciphertext
+
+def xor():
+    explain_xor()
+
+    plaintext = open("/flag").read().strip()
+    key = "secretkey"
+    rounds = 3 
+    ciphertext = xor_maker(plaintext, key, rounds)
+
+    print("\nGood luck!")
+    
+if __name__ == "__main__":
+    xor()

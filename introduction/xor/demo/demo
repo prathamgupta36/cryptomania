@@ -1,0 +1,87 @@
+#!/opt/pwn.college/python
+
+import time
+
+def xor_encrypt(plaintext: str, key: int) -> str:
+    ciphertext = ''.join(chr(ord(char) ^ key) for char in plaintext)
+    return ciphertext
+
+def explain_xor():
+    print("------------------------------------------")
+    print("Welcome to your journey of Cryptography!")
+    print("------------------------------------------")
+    print("We are learning XOR in this challenge.")
+    print("------------------------------------------")
+    time.sleep(0.20)
+    
+    print("XOR Table (A XOR B):")
+    print("  A | B | A XOR B")
+    print(" ---------------")
+    print("  0 | 0 |   0")
+    print("  0 | 1 |   1")
+    print("  1 | 0 |   1")
+    print("  1 | 1 |   0")
+    print("\nXOR Properties:")
+    print(" 1. A XOR 0 = A")
+    print(" 2. A XOR A = 0\n")
+    print("Well those are the rules and honestly I want to elaborate on those")
+    print("Since XOR table is in binary, I would give the example calculations in binary, we can convert anything to binary.")
+    print("I am hoping binary is not a foreign concept, its just a way to represent anything in terms of 0 and 1.")
+    print("For the sake of this example we going to convert our 'pwn.college' to binary and then xor it with a key.")
+    print("This essentailly means that whatever binary we get after converting ascii, we use the above table and align the bits to match the key's binary and get the result.")
+    print("Lets say that ASCII character is 'A' and we want to XOR it with key 3.")
+    print("ASCII of 'A' is 65 and binary of 65 is 01000001.")
+    print("Key 3 in binary is 00000011.")
+    print("So we align them like this:")
+    print("  01000001")
+    print("  00000011")
+    print("  ---------")
+    print("  01000010")
+    print("You see how 0 XOR 0 is 0, 1 XOR 0 is 1, 0 XOR 1 is 1 and 1 XOR 1 is 0.")
+    print("The result is 01000010 which is 66 in decimal.")
+    print("So the result is 66 which is 'B' in ASCII.")
+    print("This is how we can encrypt a message with a key.")
+    time.sleep(1)
+
+def visualize_xor(plaintext: str, key: int):
+    print(f"--- XOR Encryption of '{plaintext}' with Key '{key}' ---\n")
+    
+    key_char = chr(key)
+    key_binary = format(key, '08b')
+    print(f"Key (in ASCII): '{key_char}' | Key (in Decimal): {key} | Key (in Binary): {key_binary}")
+    time.sleep(0.2)
+    print("\n")
+
+    ciphertext = ''
+    for i, char in enumerate(plaintext):
+        p_val = ord(char)
+        p_binary = format(p_val, '08b')
+        k_val = key
+        xor_val = p_val ^ k_val
+        xor_binary = format(xor_val, '08b')
+        ciphertext += chr(xor_val)
+
+
+        print(f"Step  {i+1}: '{char}' (ASCII {p_val}, Binary {p_binary})")
+        print(f"                  Key {k_val} (Binary {key_binary})")
+        print(f"= Cipher '{chr(xor_val)}' (ASCII {xor_val}, Binary {xor_binary})\n")
+        time.sleep(0.5)
+
+    print("\nRemember we learned how to use hex before, ciphertext can also be converted to hex rather than binary as those can be large (binary) and tricky (ASCII with special characters).")
+    print("\nEncrypted Ciphertext (Hex):", ciphertext.encode().hex())
+    print(f"Ciphertext (ASCII): '{ciphertext}'\n")
+    print("As you can see if you want to send the ciphertext to someone then ASCII can get difficult with the different characters but hex seems a lot easier.")
+    
+    return ciphertext
+
+def xor_demo():
+    explain_xor()
+
+    plaintext = "pwn.college"
+    key = 3  
+    ciphertext = visualize_xor(plaintext, key)
+
+    print("\nNow you know how XOR works.")
+    
+if __name__ == "__main__":
+    xor_demo()

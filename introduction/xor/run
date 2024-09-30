@@ -1,0 +1,38 @@
+#!/opt/pwn.college/python
+
+import os
+import subprocess
+
+def run_script(script_path):
+    """Run the specified Python script."""
+    try:
+        result = subprocess.run(['python3', script_path], check=True)
+        print(f"Script executed successfully with exit code {result.returncode}.")
+    except subprocess.CalledProcessError as e:
+        print(f"An error occurred while running the script: {e}")
+
+def main():
+    print("------------------------------------------")
+    print("Welcome to your journey of Cryptography!")
+    print("------------------------------------------")
+    print("We are learning XOR in this challenge.")
+    print("------------------------------------------")
+    print("Please choose an option:")
+    print("1. Run Demo")
+    print("2. Run Challenge")
+    
+    choice = input("Enter your choice (1 or 2): ")
+    
+    if choice == '1':
+        demo_script = '/challenge/demo/demo'  
+        print(f"Running demo script: {demo_script}")
+        run_script(demo_script)
+    elif choice == '2':
+        challenge_script = '/challenge/challenge/challenge'
+        print(f"Running challenge script: {challenge_script}")
+        run_script(challenge_script)
+    else:
+        print("Invalid choice. Please enter 1 or 2.")
+
+if __name__ == "__main__":
+    main()
