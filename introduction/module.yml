@@ -12,7 +12,7 @@ challenges:
     name: Obscura
   - id: xor
     name: XOR
-  # - id: randomxor
-  #   name: XOR Random
-  #   visibility: 
-  #   start: "2029-08-21T10:30:00-07:00"
+  - id: randomkey
+    name: XOR 2.0
+    visibility: 
+    start: "2029-08-21T10:30:00-07:00"
