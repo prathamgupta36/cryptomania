@@ -1,0 +1,50 @@
+#!/opt/pwn.college/python
+
+# Imports
+import hashlib
+import time
+import sys
+import random
+
+# This is the function to encrypt using xor
+def xor_encrypt(plaintext: str, key: str) -> str:
+    ciphertext = ''
+    key_len = len(key)
+    for i, char in enumerate(plaintext):
+        key_char = key[i % key_len] 
+        xor_char = chr(ord(char) ^ ord(key_char))
+        ciphertext += xor_char
+
+    return ciphertext
+
+# Loads flag
+def load_flag():
+    with open("/flag", 'r') as f:
+        return f.read().strip()
+
+# Generates random key from the length given
+def random_key_generator():
+    return ''.join(random.choice('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789') for _ in range(11))
+
+def main():
+    if len(sys.argv) > 1 and sys.argv[1].lower() == "hint":
+        print("HINT: You know part of the flag so use that to get the key.")
+        return
+    print("------------------------------------------")
+    print("Welcome to your journey of Cryptography!")
+    print("------------------------------------------")
+    print("Now we learn how to decrypt without a key.")
+    print("------------------------------------------")
+    time.sleep(0.20)
+    
+    print("You already know how XOR works from the previous challenge, now you don't get demo to see what's happening.")
+    print("Since we don't have the key, we will have to guess it or do we?\n")
+    
+    key = random_key_generator()
+    encrypted = xor_encrypt(load_flag(), key)
+
+    print("If you need hint then use hint as an argument with this challenge.\n")
+    print("This is the encrypted flag in hex: ", encrypted.encode().hex())
+
+if __name__ == "__main__":
+    main()

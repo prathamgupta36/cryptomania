@@ -1,0 +1,1 @@
+In this challenge the xor key is random
