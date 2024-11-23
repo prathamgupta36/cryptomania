@@ -14,5 +14,3 @@ challenges:
     name: XOR
   - id: randomkey
     name: XOR 2.0
-    visibility: 
-    start: "2029-08-21T10:30:00-07:00"
