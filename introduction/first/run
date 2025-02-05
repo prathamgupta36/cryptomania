@@ -40,7 +40,7 @@ def main():
     time.sleep(0.20)
     
     print("Languages can be cryptic if you haven't learned it.")
-    print("For this challenge you need to give me the English for the last phrase from the description of this dojo.")
+    print("For this challenge you need to give me the English for the last phrase from the dojo's description.")
     print("Hint: Use Google translate. All lowecase letters and no funny characters.")
     print("\n")
     time.sleep(0.2)
