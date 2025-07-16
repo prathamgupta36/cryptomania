@@ -14,3 +14,4 @@ challenges:
     name: XOR
   - id: randomkey
     name: XOR 2.0
+    requires: xor
