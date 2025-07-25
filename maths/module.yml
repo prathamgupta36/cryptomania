@@ -16,26 +16,17 @@ challenges:
   - id: modularbasics
     name: Modular Arithmetic
     image: prathamgupta36/cryptomania-math-basics
-    visibility:       
-      start: "2029-08-21T10:30:00-07:00"
   - id: modularinverse
     name: Modular Inverse
     image: prathamgupta36/cryptomania-math-basics
-    visibility:       
-      start: "2029-08-21T10:30:00-07:00"
+    progression_locked: true
   - id: crt
     name: Chinese Remainder Theorem
     image: prathamgupta36/cryptomania-math-basics
-    visibility:       
-      start: "2029-08-21T10:30:00-07:00"
   - id: fermat
     name: Fermat Theorem
     image: prathamgupta36/cryptomania-math-basics
-    visibility:       
-      start: "2029-08-21T10:30:00-07:00"
   - id: final
     name: Final Boss
     image: prathamgupta36/cryptomania-math-basics
-    visibility:       
-      start: "2029-08-21T10:30:00-07:00"
     progression_locked: true
