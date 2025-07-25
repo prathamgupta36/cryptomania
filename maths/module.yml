@@ -3,7 +3,7 @@ name: Basic Mathematics
 
 challenges:
   - id: modularbasics
-    name: Modular Artihmetic
+    name: Modular Arithmetic
     image: prathamgupta36/cryptomania-math-basics
     visibility:       
       start: "2029-08-21T10:30:00-07:00"
