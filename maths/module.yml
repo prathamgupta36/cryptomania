@@ -1,6 +1,15 @@
 id: basics
 name: Basic Mathematics
 
+- name: Reading
+  type: markdown
+  content: |
+    - Learning Modular Arithmetic- [Fun With Modular Arithmetic](https://betterexplained.com/articles/fun-with-modular-arithmetic/) and [Some Puzzles](https://codeforces.com/blog/entry/72527).
+    - [Modular Inverse](https://cp-algorithms.com/algebra/module-inverse.html)
+    - [Chinese Remainder Theorem](https://crypto.stanford.edu/pbc/notes/numbertheory/crt.html)
+    - [Fermat Theorem](https://www.geeksforgeeks.org/dsa/fermats-little-theorem/)
+    - More [Fun](https://www.nsf.gov/news/350-years-later-fermats-last-theorem-finally) and [Interesting](https://www.quantamagazine.org/the-core-of-fermats-last-theorem-just-got-superpowered-20250602/) stuff about Fermat Theorem. 
+
 challenges:
   - id: modularbasics
     name: Modular Arithmetic
