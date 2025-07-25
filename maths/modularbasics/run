@@ -1,0 +1,161 @@
+#!/usr/bin/exec-suid -- /usr/bin/python3
+import subprocess
+import sys
+import os
+import time
+import random
+from pathlib import Path
+
+# Rich libraries
+from rich.console import Console
+from rich.panel import Panel
+from rich.table import Table
+from rich.progress import Progress, SpinnerColumn, TextColumn
+from rich.text import Text
+from rich.align import Align
+from rich.live import Live
+from rich.prompt import Prompt, Confirm
+from rich.layout import Layout
+import pyfiglet
+import colorama
+from colorama import Fore, Style
+from termcolor import colored
+
+colorama.init()
+
+class EnhancedModularTutorial:
+    def __init__(self):
+        self.console = Console()
+        self.colors = {
+            'primary': 'bright_cyan',
+            'secondary': 'bright_magenta',
+            'accent': 'bright_green',
+            'info': 'bright_blue',
+            'warning': 'bright_yellow',
+            'error': 'bright_red'
+        }
+
+    def display_banner(self):
+        banner = pyfiglet.figlet_format("CRYPTOMANIA", font="slant")
+        subtitle = Text("Interactive Modular Arithmetic Challenge", style="bold {}")
+        subtitle.stylize(self.colors['info'])
+
+        panel = Panel(
+            Align.center(Text(banner, style=f"bold {self.colors['primary']}") + Text("\n") + subtitle),
+            border_style=self.colors['accent'],
+            padding=(1, 2)
+        )
+        self.console.print(panel)
+        with Progress(
+            SpinnerColumn(),
+            TextColumn("[progress.description]{task.description}"),
+            console=self.console,
+            transient=True
+        ) as prog:
+            task = prog.add_task("Loading tutorial modules...", total=100)
+            for _ in range(100):
+                prog.update(task, advance=1)
+                time.sleep(0.005)
+
+    def shuffle_reveal(self, flag: str):
+        panel = Panel(Text("Decoding flag...", style="bold {}".format(self.colors['primary'])), border_style=self.colors['secondary'])
+        self.console.print(panel)
+        time.sleep(0.75)
+
+        revealed = ['_'] * len(flag)
+        for i, ch in enumerate(flag):
+            if ch in '{}_' :
+                revealed[i] = ch
+                self.console.print("".join(revealed), end="\r")
+                time.sleep(0.1)
+                continue
+            for _ in range(10):
+                revealed[i] = random.choice('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789')
+                self.console.print("".join(revealed), end="\r")
+                time.sleep(0.1)
+            revealed[i] = ch
+            self.console.print("".join(revealed), end="\r")
+            time.sleep(0.1)
+        self.console.print("\n")
+
+    def demonstrate_clock_arithmetic(self):
+        points = [f"[bold]{i}[/bold]" for i in range(7)]
+        panel = Panel(
+            Text("Think of modular arithmetic like a clock!", style=f"bold {self.colors['info']}"),
+            border_style=self.colors['accent']
+        )
+        self.console.print(panel)
+        time.sleep(0.5)
+        for pos in range(8):
+            display = ["○"] * 7
+            display[pos % 7] = "●"
+            clock_line = " ".join(display)
+            self.console.print(f"Position {pos}: [{clock_line}] → {pos} ≡ {pos % 7} (mod 7)")
+            time.sleep(0.4)
+        self.console.print()
+
+    def interactive_problems(self):
+        self.console.rule(Text("🧩 Let's Test Your Skills 🧩", style=f"bold {self.colors['secondary']}"))
+        time.sleep(0.3)
+
+        # Problem 1: Addition
+        a, b, m = random.randint(15,30), random.randint(20,35), random.randint(7,15)
+        correct = (a + b) % m
+        self.console.print(f"[cyan]Problem 1:[/] What is ({a} + {b}) mod {m}? ")
+        ans = Prompt.ask("Your answer")
+        if ans.isdigit() and int(ans) == correct:
+            self.console.print(f"[green]Correct! {a}+{b} ≡ {correct} (mod {m})[/green]")
+        else:
+            self.console.print(f"[red]Oops! The answer was {correct}[/red]")
+            return False
+        time.sleep(0.5)
+
+        # Problem 2: Exponentiation
+        base, exp, m2 = random.randint(3,8), random.randint(3,5), random.randint(11,17)
+        corr2 = pow(base, exp, m2)
+        self.console.print(f"[cyan]Problem 2:[/] What is {base}^{exp} mod {m2}? (Hint: {base}^{exp} = {base**exp})")
+        ans2 = Prompt.ask("Your answer")
+        if ans2.isdigit() and int(ans2) == corr2:
+            self.console.print(f"[green]Excellent! {base}^{exp} mod {m2} = {corr2}[/green]")
+        else:
+            self.console.print(f"[red]Incorrect. It is {corr2}[/red]")
+            return False
+        time.sleep(0.5)
+
+        # Problem 3: Negative mod
+        val, m3 = random.randint(-50,-10), random.randint(5,12)
+        corr3 = val % m3
+        self.console.print(f"[cyan]Problem 3:[/] What is {val} mod {m3}? (Wraps around!)")
+        ans3 = Prompt.ask("Your answer")
+        if ans3.lstrip('-').isdigit() and int(ans3) == corr3:
+            self.console.print(f"[green]Perfect! {val} mod {m3} = {corr3}[/green]")
+        else:
+            self.console.print(f"[red]Nope. It evaluates to {corr3}[/red]")
+            return False
+        time.sleep(0.5)
+
+        return True
+
+    def load_flag(self):
+        try:
+            return Path('/flag').read_text().strip()
+        except Exception:
+            return 'FLAG{demo_flag_not_found}'
+
+    def run(self):
+        self.console.clear()
+        self.display_banner()
+        self.demonstrate_clock_arithmetic()
+
+        if not self.interactive_problems():
+            self.console.print(Text("Try again later!", style=f"bold {self.colors['warning']}"))
+            return
+
+        self.console.print(Text("Outstanding! You've mastered modular arithmetic fundamentals!", style=f"bold {self.colors['accent']}"))
+        time.sleep(0.3)
+
+        flag = self.load_flag()
+        self.shuffle_reveal(flag)
+
+if __name__ == '__main__':
+    EnhancedModularTutorial().run()

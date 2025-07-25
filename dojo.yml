@@ -4,3 +4,6 @@ type: public
 
 modules:
   - id: introduction
+  - id: basics
+    visibility:       
+      start: "2029-08-21T10:30:00-07:00"
