@@ -1,0 +1,135 @@
+#!/usr/bin/exec-suid -- /usr/bin/python3
+
+import time
+import random
+from pathlib import Path
+from rich.console import Console
+from rich.panel import Panel
+from rich.table import Table
+from rich.progress import Progress, SpinnerColumn, TextColumn
+from rich.text import Text
+from rich.align import Align
+from rich.prompt import Prompt
+import pyfiglet
+import colorama
+
+# Initialize colorama for cross-platform support
+colorama.init()
+
+class EnhancedCBCTutorial:
+    def __init__(self):
+        self.console = Console()
+        self.colors = {
+            'primary': 'bright_magenta',
+            'secondary': 'bright_cyan',
+            'accent': 'bright_green',
+            'info': 'bright_blue',
+            'warning': 'bright_yellow',
+            'error': 'bright_red',
+            'success': 'bright_green'
+        }
+
+    def display_banner(self):
+        banner = pyfiglet.figlet_format("Cryptomania", font="slant")
+        subtitle = Text("CBC Mode Encryption", style=f"bold {self.colors['info']}")
+        panel = Panel(
+            Align.center(Text(banner, style=f"bold {self.colors['primary']}") + Text("\n") + subtitle),
+            border_style=self.colors['accent'], padding=(1,2)
+        )
+        self.console.print(panel)
+        with Progress(SpinnerColumn(), TextColumn("[progress.description]{task.description}"),
+                      console=self.console, transient=True) as prog:
+            task = prog.add_task("Initializing CBC modules...", total=100)
+            for _ in range(100):
+                prog.update(task, advance=1)
+                time.sleep(0.005)
+
+    def shuffle_reveal(self, flag: str):
+        panel = Panel(Text("Decoding flag...", style=f"bold {self.colors['info']}"),
+                      border_style=self.colors['secondary'])
+        self.console.print(panel)
+        time.sleep(0.75)
+        revealed = ['_'] * len(flag)
+        for i, ch in enumerate(flag):
+            if ch in '{}_':
+                revealed[i] = ch
+            else:
+                for _ in range(10):
+                    revealed[i] = random.choice('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789')
+                    self.console.print("".join(revealed), end="\r")
+                    time.sleep(0.1)
+                revealed[i] = ch
+            self.console.print("".join(revealed), end="\r")
+            time.sleep(0.1)
+        self.console.print("\n")
+
+    def demonstrate_cbc(self):
+        self.console.rule(Text("CBC Mode Visualization", style=f"bold {self.colors['secondary']}"))
+        time.sleep(0.5)
+        plaintext_blocks = ["HELLO ", "WORLD!"]
+        IV = "123456"
+        previous = IV
+        self.console.print(f"IV: {IV.encode().hex()} (Initialization Vector)")
+        for idx, block in enumerate(plaintext_blocks, 1):
+            xor_res = "".join(chr(ord(a) ^ ord(b)) for a, b in zip(block, previous))
+            ct = xor_res.encode().hex()
+            panel = Panel(f"[bold]Block {idx}[/bold]\n"
+                          f"Plaintext: {block}\n"
+                          f"XOR w/ Prev CT: {xor_res.encode().hex()}\n"
+                          f"Ciphertext: {ct}",
+                          title=f"Step {idx}", border_style=self.colors['accent'])
+            self.console.print(panel)
+            previous = xor_res
+            time.sleep(0.5)
+        self.console.print()
+
+    def challenge(self):
+        self.console.rule(Text("Your CBC Challenge", style=f"bold {self.colors['secondary']}"))
+        time.sleep(0.3)
+        IV = hex(random.getrandbits(48))[2:].zfill(12)
+        KEY = hex(random.getrandbits(48))[2:].zfill(12)
+        PT1 = hex(random.getrandbits(48))[2:].zfill(12)
+        PT2 = hex(random.getrandbits(48))[2:].zfill(12)
+        XOR_PT1 = hex(int(PT1,16) ^ int(IV,16))[2:].zfill(12)
+        CT1 = hex(random.getrandbits(48))[2:].zfill(12)
+        XOR_PT2 = hex(int(PT2,16) ^ int(CT1,16))[2:].zfill(12)
+        CT2 = hex(random.getrandbits(48))[2:].zfill(12)
+
+        table = Table(show_header=True, header_style=f"bold {self.colors['primary']}")
+        table.add_column("Parameter", style="cyan")
+        table.add_column("Value", style="green")
+        table.add_row("IV", IV)
+        table.add_row("Key", KEY)
+        table.add_row("PT1", PT1)
+        table.add_row("PT1 ⊕ IV", XOR_PT1)
+        table.add_row("CT1", CT1)
+        table.add_row("PT2", PT2)
+        table.add_row("PT2 ⊕ CT1", "[unknown]")
+        table.add_row("CT2", "[unknown]")
+        self.console.print(table)
+
+        user = Prompt.ask("Compute CT2 (in hex)")
+        correct = CT2
+        if user.lower() == correct:
+            self.console.print(Text("Correct! Now you understand CBC.", style=f"bold {self.colors['success']}"))
+            time.sleep(0.3)
+            flag = self.load_flag()
+            self.shuffle_reveal(flag)
+        else:
+            self.console.print(Text(f"Incorrect. CT2 was {correct}", style=f"bold {self.colors['error']}"))
+
+    def load_flag(self):
+        try:
+            return Path("/flag").read_text().strip()
+        except:
+            return "FLAG{demo_flag_not_found}"
+
+    def run(self):
+        self.console.clear()
+        self.display_banner()
+        self.demonstrate_cbc()
+        self.challenge()
+
+if __name__ == "__main__":
+    EnhancedCBCTutorial().run()
+

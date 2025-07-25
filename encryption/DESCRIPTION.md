@@ -1,0 +1,1 @@
+Now we are delving into the more interesting encryption part, in this module you will understand different types of encryptions and their implementation.
