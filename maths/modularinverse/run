@@ -1,0 +1,179 @@
+#!/usr/bin/exec-suid -- /usr/bin/python3
+
+import time
+import random
+from pathlib import Path
+from rich.console import Console
+from rich.panel import Panel
+from rich.table import Table
+from rich.progress import Progress, SpinnerColumn, TextColumn
+from rich.text import Text
+from rich.align import Align
+from rich.prompt import Prompt
+import pyfiglet
+import colorama
+
+# Initialize colorama
+colorama.init()
+
+class EnhancedInverseTutorial:
+    def __init__(self):
+        self.console = Console()
+        self.colors = {
+            'primary': 'bright_green',
+            'secondary': 'bright_magenta',
+            'accent': 'bright_cyan',
+            'info': 'bright_blue',
+            'warning': 'bright_yellow',
+            'error': 'bright_red'
+        }
+
+    def display_banner(self):
+        banner = pyfiglet.figlet_format("Cryptomania", font="slant")
+        subtitle = Text("Modular Inverse Demo Challenge", style=f"bold {self.colors['info']}")
+        panel = Panel(
+            Align.center(Text(banner, style=f"bold {self.colors['primary']}") + Text("\n") + subtitle),
+            border_style=self.colors['accent'], padding=(1,2)
+        )
+        self.console.print(panel)
+        with Progress(
+            SpinnerColumn(), TextColumn("[progress.description]{task.description}"),
+            console=self.console, transient=True
+        ) as prog:
+            task = prog.add_task("Loading inverse modules...", total=100)
+            for _ in range(100):
+                prog.update(task, advance=1)
+                time.sleep(0.005)
+
+    def shuffle_reveal(self, flag: str):
+        panel = Panel(Text("Decoding flag...", style=f"bold {self.colors['primary']}"), border_style=self.colors['secondary'])
+        self.console.print(panel)
+        time.sleep(0.75)
+        revealed = ['_'] * len(flag)
+        for i, ch in enumerate(flag):
+            if ch in '{}_':
+                revealed[i] = ch
+                self.console.print("".join(revealed), end="\r")
+                time.sleep(0.1)
+                continue
+            for _ in range(10):
+                revealed[i] = random.choice('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789')
+                self.console.print("".join(revealed), end="\r")
+                time.sleep(0.1)
+            revealed[i] = ch
+            self.console.print("".join(revealed), end="\r")
+            time.sleep(0.1)
+        self.console.print("\n")
+
+    def demonstrate_extended_euclidean(self, a: int, m: int):
+        self.console.rule(Text("Extended Euclidean Algorithm", style=f"bold {self.colors['secondary']}"))
+        self.console.print(Text(f"Finding inverse of {a} mod {m}:", style=f"bold {self.colors['info']}"))
+        time.sleep(0.5)
+
+        old_r, r = a, m
+        old_s, s = 1, 0
+        steps = []
+        step = 0
+        while r != 0:
+            q = old_r // r
+            old_r, r = r, old_r - q * r
+            old_s, s = s, old_s - q * s
+            steps.append((step, q, old_r, r, old_s))
+            step += 1
+            time.sleep(0.5)
+
+        table = Table(title="Steps", show_header=True, header_style=f"bold {self.colors['primary']}")
+        table.add_column("Step", style="cyan")
+        table.add_column("Quotient", style="magenta")
+        table.add_column("r", style="green")
+        table.add_column("new r", style="yellow")
+        table.add_column("s", style="bright_blue")
+        for st, q, oldr, newr, olds in steps:
+            table.add_row(str(st), str(q), str(oldr), str(newr), str(olds))
+        self.console.print(table)
+        time.sleep(0.5)
+
+        if old_r == 1:
+            inv = old_s % m
+            self.console.print(Text(f"Inverse exists! x = {inv}", style=f"bold {self.colors['accent']}"))
+            self.console.print(f"Verification: {a} × {inv} = {a*inv} ≡ {(a*inv)%m} (mod {m})")
+            return inv
+        else:
+            self.console.print(Text(f"No inverse since gcd ≠ 1 (gcd = {old_r})", style=f"bold {self.colors['error']}"))
+            return None
+
+    def interactive_problems(self):
+        self.console.rule(Text("🧩 Solve These 🧩", style=f"bold {self.colors['secondary']}"))
+        time.sleep(0.3)
+
+        def gcd(x, y):
+            while y:
+                x, y = y, x % y
+            return x
+
+        # Problem 1
+        a1 = random.randint(3,10)
+        m1 = random.choice([p for p in [7,11,13,17,19] if gcd(a1,p)==1])
+        inv1 = pow(a1, -1, m1)
+        ans1 = Prompt.ask(f"[cyan]Problem 1:[/] Inverse of {a1} mod {m1}?")
+        if ans1.isdigit() and int(ans1)==inv1:
+            self.console.print(f"[green]Correct! x={inv1}[/green]")
+        else:
+            self.console.print(f"[red]Incorrect. Answer was {inv1}[/red]")
+            return False
+        time.sleep(0.5)
+
+        # Problem 2
+        a2 = random.randint(10,25)
+        m2 = random.choice([p for p in [29,31,37,41,43] if gcd(a2,p)==1])
+        inv2 = pow(a2, -1, m2)
+        ans2 = Prompt.ask(f"[cyan]Problem 2:[/] Inverse of {a2} mod {m2}? (Use EE)")
+        if ans2.isdigit() and int(ans2)==inv2:
+            self.console.print(f"[green]Well done! x={inv2}[/green]")
+        else:
+            self.console.print(f"[red]Incorrect. Answer was {inv2}[/red]")
+            return False
+        time.sleep(0.5)
+
+        # Problem 3
+        pairs = [(4,12),(6,15),(8,20),(9,21),(10,25)]
+        a3,m3 = random.choice(pairs)
+        ans3 = Prompt.ask(f"[cyan]Problem 3:[/] Inverse of {a3} mod {m3}? (Enter -1 if none)")
+        user = int(ans3) if ans3.lstrip('-').isdigit() else None
+        if gcd(a3,m3)!=1:
+            if user==-1:
+                self.console.print(f"[green]Correct! No inverse exists[/green]")
+            else:
+                self.console.print(f"[red]Wrong. No inverse exists[/red]")
+                return False
+        else:
+            inv3 = pow(a3,-1,m3)
+            if user==inv3:
+                self.console.print(f"[green]Correct! x={inv3}[/green]")
+            else:
+                self.console.print(f"[red]Incorrect. Answer was {inv3}[/red]")
+                return False
+        time.sleep(0.5)
+        return True
+
+    def load_flag(self):
+        try:
+            return Path('/flag').read_text().strip()
+        except:
+            return 'FLAG{demo_flag_not_found}'
+
+    def run(self):
+        self.console.clear()
+        self.display_banner()
+        inv = self.demonstrate_extended_euclidean(17,43)
+        self.console.print()
+        if not self.interactive_problems():
+            self.console.print(Text("Try again later!", style=f"bold {self.colors['warning']}"))
+            return
+        self.console.print(Text("Fantastic! You've mastered modular inverses!", style=f"bold {self.colors['accent']}"))
+        time.sleep(0.3)
+        flag = self.load_flag()
+        self.shuffle_reveal(flag)
+
+if __name__=='__main__':
+    EnhancedInverseTutorial().run()

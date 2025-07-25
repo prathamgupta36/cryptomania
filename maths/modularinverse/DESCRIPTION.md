@@ -1,0 +1,1 @@
+Learn how to find numbers that "undo" multiplication in modular systems using the Extended Euclidean Algorithm. This concept is essential for RSA decryption and many other cryptographic operations.
