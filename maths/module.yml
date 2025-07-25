@@ -2,7 +2,7 @@ id: basics
 name: Basic Mathematics
 
 challenges:
-  - id: modularbasic
+  - id: modularbasics
     name: Modular Artihmetic
     image: prathamgupta36/cryptomania-math-basics
     visibility:       
