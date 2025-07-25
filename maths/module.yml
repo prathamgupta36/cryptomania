@@ -12,3 +12,8 @@ challenges:
     image: prathamgupta36/cryptomania-math-basics
     visibility:       
       start: "2029-08-21T10:30:00-07:00"
+  - id: crt
+    name: Chinese Remainder Theorem
+    image: prathamgupta36/cryptomania-math-basics
+    visibility:       
+      start: "2029-08-21T10:30:00-07:00"

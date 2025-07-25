@@ -1,0 +1,200 @@
+#!/usr/bin/exec-suid -- /usr/bin/python3
+
+import time
+import random
+from pathlib import Path
+from rich.console import Console
+from rich.panel import Panel
+from rich.table import Table
+from rich.progress import Progress, SpinnerColumn, TextColumn
+from rich.text import Text
+from rich.align import Align
+from rich.prompt import Prompt
+import pyfiglet
+import colorama
+
+# Initialize colorama for cross-platform support
+colorama.init()
+
+class EnhancedCRTTutorial:
+    def __init__(self):
+        self.console = Console()
+        self.colors = {
+            'primary': 'bright_cyan',
+            'secondary': 'bright_magenta',
+            'accent': 'bright_green',
+            'info': 'bright_blue',
+            'warning': 'bright_yellow',
+            'error': 'bright_red'
+        }
+
+    def display_banner(self):
+        banner = pyfiglet.figlet_format("Cryptomania", font="slant")
+        subtitle = Text("Chinese Remainder Theorem Challenge", style=f"bold {self.colors['info']}")
+        panel = Panel(
+            Align.center(Text(banner, style=f"bold {self.colors['primary']}") + Text("\n") + subtitle),
+            border_style=self.colors['accent'], padding=(1,2)
+        )
+        self.console.print(panel)
+
+        with Progress(
+            SpinnerColumn(), TextColumn("[progress.description]{task.description}"),
+            console=self.console, transient=True
+        ) as prog:
+            task = prog.add_task("Loading CRT modules...", total=100)
+            for _ in range(100):
+                prog.update(task, advance=1)
+                time.sleep(0.005)
+
+    def shuffle_reveal(self, flag: str):
+        panel = Panel(Text("Decoding flag...", style=f"bold {self.colors['primary']}"), border_style=self.colors['secondary'])
+        self.console.print(panel)
+        time.sleep(0.75)
+        revealed = ['_'] * len(flag)
+        for i, ch in enumerate(flag):
+            if ch in '{}_':
+                revealed[i] = ch
+                self.console.print("".join(revealed), end="\r")
+                time.sleep(0.1)
+                continue
+            for _ in range(10):
+                revealed[i] = random.choice('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789')
+                self.console.print("".join(revealed), end="\r")
+                time.sleep(0.1)
+            revealed[i] = ch
+            self.console.print("".join(revealed), end="\r")
+            time.sleep(0.1)
+        self.console.print("\n")
+
+    def demonstrate_simple(self):
+        panel = Panel(Text("Simple CRT Example", style=f"bold {self.colors['info']}"), border_style=self.colors['accent'])
+        self.console.print(panel)
+        time.sleep(0.5)
+        self.console.print("x ≡ 2 (mod 3)")
+        self.console.print("x ≡ 3 (mod 5)")
+        time.sleep(0.5)
+
+        steps = [
+            "From x=3k+2, substitute into 3k+2≡3 mod5 → 3k≡1 (mod5)",
+            "Find inverse of 3 mod5: 3×2≡6≡1, so k≡2 (mod5)",
+            "Thus x=3(5j+2)+2=15j+8 → x≡8 (mod15)",
+            "Verify: 8≡2(mod3) ✓ and 8≡3(mod5) ✓"
+        ]
+        for line in steps:
+            self.console.print(f"• {line}")
+            time.sleep(0.5)
+        self.console.print()
+
+    def demonstrate_algorithm(self, remainders, moduli):
+        panel = Panel(Text("CRT Algorithm Steps", style=f"bold {self.colors['info']}"), border_style=self.colors['accent'])
+        self.console.print(panel)
+        time.sleep(0.5)
+
+        # Table of steps
+        total = 1
+        for m in moduli:
+            total *= m
+        table = Table(show_header=True, header_style=f"bold {self.colors['primary']}")
+        table.add_column("Step")
+        table.add_column("Calculation")
+        table.add_column("Result")
+
+        table.add_row("M", f"Product of moduli", str(total))
+        result = 0
+        for idx, (r, m) in enumerate(zip(remainders, moduli), start=1):
+            Mi = total // m
+            yi = pow(Mi, -1, m)
+            term = r * Mi * yi
+            table.add_row(f"Mi", f"{total} ÷ {m}", str(Mi))
+            table.add_row(f"yi", f"Inverse of {Mi} mod {m}", str(yi))
+            table.add_row(f"Term{idx}", f"{r}×{Mi}×{yi}", str(term))
+            result += term
+        table.add_row("Sum", "Σ terms", str(result))
+        final = result % total
+        table.add_row("Answer", f"x ≡ ? mod {total}", f"{final}")
+        self.console.print(table)
+        self.console.print()
+
+    def solve_crt(self, rem, mod):
+        total = 1
+        for m in mod:
+            total *= m
+        res = 0
+        for r, m in zip(rem, mod):
+            Mi = total // m
+            yi = pow(Mi, -1, m)
+            res += r * Mi * yi
+        return res % total
+
+    def interactive_problems(self):
+        self.console.rule(Text("Solve These", style=f"bold {self.colors['secondary']}"))
+        time.sleep(0.3)
+
+        # Problem 1: two-equation system
+        primes = [3,5,7,11,13]
+        m1, m2 = random.sample(primes, 2)
+        r1, r2 = random.randint(1,m1-1), random.randint(1,m2-1)
+        ans = self.solve_crt([r1,r2],[m1,m2])
+        user = Prompt.ask(f"Problem1: x≡{r1}(mod{m1}), x≡{r2}(mod{m2}). Smallest x?")
+        if user.isdigit() and int(user)==ans:
+            self.console.print(f"[green]Correct! x≡{ans}(mod{m1*m2})[/green]")
+        else:
+            self.console.print(f"[red]Wrong, answer is {ans}[/red]")
+            return False
+        time.sleep(0.5)
+
+        # Problem 2: three-equation system
+        def gcd(a,b):
+            while b: a,b=b,a%b
+            return a
+        mods = random.sample([3,4,5,7,8,9],3)
+        while any(gcd(x,y)>1 for x in mods for y in mods if x!=y):
+            mods = random.sample([3,4,5,7,8,9],3)
+        rems = [random.randint(1,m-1) for m in mods]
+        ans2 = self.solve_crt(rems,mods)
+        problem = \
+ f"Problem2: x≡{rems[0]}(mod{mods[0]}), x≡{rems[1]}(mod{mods[1]}), x≡{rems[2]}(mod{mods[2]})"
+        user2 = Prompt.ask(problem)
+        if user2.isdigit() and int(user2)==ans2:
+            self.console.print(f"[green]Excellent! x≡{ans2}(mod{mods[0]*mods[1]*mods[2]})[/green]")
+        else:
+            self.console.print(f"[red]Incorrect. Answer is {ans2}[/red]")
+            return False
+        time.sleep(0.5)
+
+        # Problem 3: cryptographic application
+        crypto = [11,13,17]
+        rems3 = [random.randint(1,m-1) for m in crypto]
+        ans3 = self.solve_crt(rems3,crypto)
+        self.console.print("Cryptographic Application")
+        for r,m in zip(rems3,crypto):
+            self.console.print(f"Message mod {m} leaves remainder {r}")
+        user3 = Prompt.ask("Original message? (smallest)")
+        if user3.isdigit() and int(user3)==ans3:
+            self.console.print(f"[green]Perfect! Message={ans3}[/green]")
+        else:
+            self.console.print(f"[red]Nope. It is {ans3}[/red]")
+            return False
+        return True
+
+    def load_flag(self):
+        try:
+            return Path('/flag').read_text().strip()
+        except:
+            return 'FLAG{demo_flag_not_found}'
+
+    def run(self):
+        self.console.clear()
+        self.display_banner()
+        self.demonstrate_simple()
+        self.demonstrate_algorithm([1,4],[3,7])
+        if not self.interactive_problems():
+            self.console.print(Text("Try again later!", style=f"bold {self.colors['warning']}"))
+            return
+        self.console.print(Text("Outstanding! You've mastered the CRT!", style=f"bold {self.colors['accent']}"))
+        time.sleep(0.3)
+        flag = self.load_flag()
+        self.shuffle_reveal(flag)
+
+if __name__=='__main__':
+    EnhancedCRTTutorial().run()

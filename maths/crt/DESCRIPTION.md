@@ -1,0 +1,1 @@
+Learn how to solve systems of modular equations - a technique that speeds up computations in RSA and other cryptographic systems by breaking large problems into smaller, manageable pieces.
