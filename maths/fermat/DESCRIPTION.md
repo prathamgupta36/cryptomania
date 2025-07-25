@@ -1,0 +1,1 @@
+Fermat's Little Theorem - a beautiful result that reveals patterns in modular exponentiation! This theorem is the mathematical foundation behind RSA encryption and helps us compute large powers efficiently in cryptographic applications.

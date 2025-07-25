@@ -1,0 +1,181 @@
+#!/usr/bin/exec-suid -- /usr/bin/python3
+
+import time
+import random
+from pathlib import Path
+from rich.console import Console
+from rich.panel import Panel
+from rich.table import Table
+from rich.progress import Progress, SpinnerColumn, TextColumn
+from rich.text import Text
+from rich.align import Align
+from rich.prompt import Prompt
+import pyfiglet
+import colorama
+
+# Initialize colorama for cross-platform support
+colorama.init()
+
+class EnhancedFermatTutorial:
+    def __init__(self):
+        self.console = Console()
+        self.colors = {
+            'primary': 'bright_yellow',
+            'secondary': 'bright_magenta',
+            'accent': 'bright_cyan',
+            'info': 'bright_blue',
+            'warning': 'bright_red',
+            'success': 'bright_green',
+            'error' : 'bright_red'
+        }
+
+    def display_banner(self):
+        banner = pyfiglet.figlet_format("Cryptomani", font="slant")
+        subtitle = Text("Fermat Theorem Challenge", style=f"bold {self.colors['info']}")
+        panel = Panel(
+            Align.center(Text(banner, style=f"bold {self.colors['primary']}") + Text("\n") + subtitle),
+            border_style=self.colors['accent'], padding=(1,2)
+        )
+        self.console.print(panel)
+        # Loading spinner
+        with Progress(
+            SpinnerColumn(), TextColumn("[progress.description]{task.description}"),
+            console=self.console, transient=True
+        ) as prog:
+            task = prog.add_task("Loading Fermat modules...", total=100)
+            for _ in range(100):
+                prog.update(task, advance=1)
+                time.sleep(0.005)
+
+    def shuffle_reveal(self, flag: str):
+        panel = Panel(Text("Decoding flag...", style=f"bold {self.colors['primary']}"), border_style=self.colors['secondary'])
+        self.console.print(panel)
+        time.sleep(0.75)
+        revealed = ['_'] * len(flag)
+        for i, ch in enumerate(flag):
+            if ch in '{}_':
+                revealed[i] = ch
+                self.console.print("".join(revealed), end="\r")
+                time.sleep(0.1)
+                continue
+            for _ in range(10):
+                revealed[i] = random.choice('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789')
+                self.console.print("".join(revealed), end="\r")
+                time.sleep(0.1)
+            revealed[i] = ch
+            self.console.print("".join(revealed), end="\r")
+            time.sleep(0.1)
+        self.console.print("\n")
+
+    def demonstrate_pattern(self, p: int):
+        panel = Panel(Text(f"Fermat's Pattern (p={p})", style=f"bold {self.colors['info']}"), border_style=self.colors['accent'])
+        self.console.print(panel)
+        time.sleep(0.5)
+        for a in range(1, min(p, 6)):
+            result = pow(a, p-1, p)
+            self.console.print(f"{a}^{p-1} ≡ {result} (mod {p})")
+            time.sleep(0.4)
+        self.console.print(Text("All ≡ 1 ", style=f"bold {self.colors['success']}"))
+        self.console.print()
+
+    def demonstrate_fast_exp(self):
+        panel = Panel(Text("Fast Exponentiation", style=f"bold {self.colors['info']}"), border_style=self.colors['accent'])
+        self.console.print(panel)
+        time.sleep(0.5)
+        # Example 1
+        p, base, exp = 11, 7, 1000
+        self.console.print(f"Compute {base}^{exp} mod {p}")
+        self.console.print("Use FLT: 7^10 ≡ 1 → 7^1000 = (7^10)^100 ≡ 1")
+        self.console.print(f"Result: {pow(base, exp, p)}")
+        time.sleep(0.5)
+        # Example 2
+        p2, base2, exp2 = 7, 3, 1001
+        red = exp2 % (p2-1)
+        self.console.print(f"Compute {base2}^{exp2} mod {p2}")
+        self.console.print(f"Since 3^6 ≡ 1, reduce exp: {exp2} ≡ {red} (mod6)")
+        self.console.print(f"Result: {pow(base2, red, p2)} (verified {pow(base2, exp2, p2)})")
+        self.console.print()
+
+    def demonstrate_primality(self):
+        panel = Panel(Text("Fermat Primality Test", style=f"bold {self.colors['info']}"), border_style=self.colors['accent'])
+        self.console.print(panel)
+        time.sleep(0.5)
+        n, a = 15, 2
+        res = pow(a, n-1, n)
+        self.console.print(f"Test n={n}: 2^{n-1} ≡ {res} (mod {n})")
+        self.console.print(Text("Not ≡1 → composite", style=f"bold {self.colors['warning']}"))
+        self.console.print()
+
+    def interactive_problems(self):
+        self.console.rule(Text("Test Yourself", style=f"bold {self.colors['secondary']}"))
+        time.sleep(0.3)
+        # Problem 1: FLT direct
+        primes = [7,11,13,17,19,23]
+        p1 = random.choice(primes)
+        a1 = random.randint(2, min(10,p1-1))
+        user1 = Prompt.ask(f"Problem1: What is {a1}^{p1-1} mod {p1}? (FLT)")
+        if user1.isdigit() and int(user1)==1:
+            self.console.print(Text("Correct! ", style=f"bold {self.colors['success']}"))
+        else:
+            self.console.print(Text("Incorrect. Answer is 1", style=f"bold {self.colors['error']}"))
+            return False
+        time.sleep(0.5)
+        # Problem 2: exponent reduction
+        p2 = random.choice(primes[:4])
+        a2, e2 = random.randint(2,5), random.randint(50,150)
+        red2 = e2 % (p2-1)
+        corr2 = pow(a2, red2, p2)
+        user2 = Prompt.ask(f"Problem2: {a2}^{e2} mod {p2}? (reduce exp)")
+        if user2.isdigit() and int(user2)==corr2:
+            self.console.print(Text("Excellent! ", style=f"bold {self.colors['success']}"))
+        else:
+            self.console.print(Text(f"Incorrect. Answer is {corr2}", style=f"bold {self.colors['error']}"))
+            return False
+        time.sleep(0.5)
+        # Problem 3: inverse using FLT
+        p3 = random.choice(primes[:4])
+        a3 = random.randint(2,min(8,p3-1))
+        inv3 = pow(a3, p3-2, p3)
+        user3 = Prompt.ask(f"Problem3: Inverse of {a3} mod {p3}? (FLT)")
+        if user3.isdigit() and int(user3)==inv3:
+            self.console.print(Text("Perfect! ", style=f"bold {self.colors['success']}"))
+        else:
+            self.console.print(Text(f"Incorrect. Answer is {inv3}", style=f"bold {self.colors['error']}"))
+            return False
+        time.sleep(0.5)
+        # Problem 4: RSA scenario
+        p4 = random.choice([23,29,31,37])
+        m4, e4, d4 = random.randint(2,5), random.choice([3,7,11]), random.randint(50,150)
+        combined = (e4*d4) % (p4-1)
+        corr4 = pow(m4, combined, p4)
+        user4 = Prompt.ask(f"Problem4: (m={m4},e={e4},d={d4},p={p4}) final message?")
+        if user4.isdigit() and int(user4)==corr4:
+            self.console.print(Text("Brilliant! ", style=f"bold {self.colors['success']}"))
+        else:
+            self.console.print(Text(f"Incorrect. Answer is {corr4}", style=f"bold {self.colors['error']}"))
+            return False
+        return True
+
+    def load_flag(self):
+        try:
+            return Path('/flag').read_text().strip()
+        except:
+            return 'FLAG{demo_flag_not_found}'
+
+    def run(self):
+        self.console.clear()
+        self.display_banner()
+        self.demonstrate_pattern(random.choice([7,11,13]))
+        self.demonstrate_fast_exp()
+        self.demonstrate_primality()
+        if not self.interactive_problems():
+            self.console.print(Text("Try again later!", style=f"bold {self.colors['warning']}"))
+            return
+        self.console.print(Text("Exceptional work! You've mastered Fermat's Theorem!", style=f"bold {self.colors['success']}"))
+        time.sleep(0.3)
+        flag = self.load_flag()
+        self.shuffle_reveal(flag)
+
+if __name__=='__main__':
+    EnhancedFermatTutorial().run()
+
