@@ -1,6 +1,7 @@
 id: basics
 name: Basic Mathematics
 
+resources:
 - name: Reading
   type: markdown
   content: |
@@ -8,7 +9,8 @@ name: Basic Mathematics
     - [Modular Inverse](https://cp-algorithms.com/algebra/module-inverse.html)
     - [Chinese Remainder Theorem](https://crypto.stanford.edu/pbc/notes/numbertheory/crt.html)
     - [Fermat Theorem](https://www.geeksforgeeks.org/dsa/fermats-little-theorem/)
-    - More [Fun](https://www.nsf.gov/news/350-years-later-fermats-last-theorem-finally) and [Interesting](https://www.quantamagazine.org/the-core-of-fermats-last-theorem-just-got-superpowered-20250602/) stuff about Fermat Theorem. 
+    - More [Fun](https://www.nsf.gov/news/350-years-later-fermats-last-theorem-finally) and [Interesting](https://www.quantamagazine.org/the-core-of-fermats-last-theorem-just-got-superpowered-20250602/) stuff about Fermat Theorem.
+
 
 challenges:
   - id: modularbasics
