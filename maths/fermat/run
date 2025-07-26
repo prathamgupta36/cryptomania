@@ -12,6 +12,7 @@ from rich.align import Align
 from rich.prompt import Prompt
 import pyfiglet
 import colorama
+from math import gcd
 
 # Initialize colorama for cross-platform support
 colorama.init()
@@ -143,17 +144,34 @@ class EnhancedFermatTutorial:
             self.console.print(Text(f"Incorrect. Answer is {inv3}", style=f"bold {self.colors['error']}"))
             return False
         time.sleep(0.5)
-        # Problem 4: RSA scenario
-        p4 = random.choice([23,29,31,37])
-        m4, e4, d4 = random.randint(2,5), random.choice([3,7,11]), random.randint(50,150)
-        combined = (e4*d4) % (p4-1)
-        corr4 = pow(m4, combined, p4)
-        user4 = Prompt.ask(f"Problem4: (m={m4},e={e4},d={d4},p={p4}) final message?")
-        if user4.isdigit() and int(user4)==corr4:
+
+        # Problem 4: RSA decrypt-the-ciphertext
+        # 1) pick a prime modulus p4 and φ = p4-1
+        p4 = random.choice([23, 29, 31, 37])
+        phi = p4 - 1
+
+        # 2) choose e4 coprime to φ, then compute d4 = e4⁻¹ mod φ
+        candidates = [e for e in [3, 5, 7, 11] if gcd(e, phi) == 1]
+        e4 = random.choice(candidates)
+        d4 = pow(e4, -1, phi)
+
+        # 3) choose a random message m4 and compute ciphertext c4 = m4^e4 mod p4
+        m4 = random.randint(2, 5)
+        c4 = pow(m4, e4, p4)
+
+        # now present (ciphertext, d, p) and ask student to decrypt
+        user4 = Prompt.ask(
+            f"Problem4: Given ciphertext={c4}, d={d4}, p={p4},\n"
+            "what is the decrypted plaintext?"
+        )
+        corr4 = pow(c4, d4, p4)
+
+        if user4.isdigit() and int(user4) == corr4:
             self.console.print(Text("Brilliant! ", style=f"bold {self.colors['success']}"))
         else:
             self.console.print(Text(f"Incorrect. Answer is {corr4}", style=f"bold {self.colors['error']}"))
             return False
+
         return True
 
     def load_flag(self):
@@ -178,4 +196,3 @@ class EnhancedFermatTutorial:
 
 if __name__=='__main__':
     EnhancedFermatTutorial().run()
-
