@@ -23,6 +23,12 @@ challenges:
   - id: crt
     name: Chinese Remainder Theorem
     image: prathamgupta36/cryptomania-math-basics
+
+- name: Reading
+  type: markdown
+  content: |
+    - [Fermat Theorem](https://www.geeksforgeeks.org/dsa/fermats-little-theorem/)
+    - More [Fun](https://www.nsf.gov/news/350-years-later-fermats-last-theorem-finally) and [Interesting](https://www.quantamagazine.org/the-core-of-fermats-last-theorem-just-got-superpowered-20250602/) stuff about Fermat Theorem.
   - id: fermat
     name: Fermat Theorem
     image: prathamgupta36/cryptomania-math-basics
