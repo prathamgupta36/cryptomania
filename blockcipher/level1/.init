@@ -1,0 +1,19 @@
+#!/bin/bash
+if [ "$#" -ne 2 ]; then
+  echo "Usage: $0 FILE1 FILE2" >&2
+  exit 2
+fi
+
+FILE1="/challenge/practice_mode_phrase"
+FILE2="/challenge/super_secret_phrase_only_the_cool_kids_know"
+FLAG="/flag"
+MATCH='pwn.college{practice}'
+
+if [ -r "$FLAG" ] && grep -Fq -- "$MATCH" "$FLAG"; then
+  rm -f -- "$FILE2"
+if else 
+else
+  rm -f -- "$FILE1" && sha256sum -- "$FLAG" 2>/dev/null | cut -d' ' -f1 >> "$FILE2" || true
+fi
+
+rm /challenge/.init
