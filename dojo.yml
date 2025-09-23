@@ -6,3 +6,4 @@ modules:
   - id: introduction
   - id: maths
   - id: encryption
+  - id: blockcipher
