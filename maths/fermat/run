@@ -31,7 +31,7 @@ class EnhancedFermatTutorial:
         }
 
     def display_banner(self):
-        banner = pyfiglet.figlet_format("Cryptomani", font="slant")
+        banner = pyfiglet.figlet_format("Cryptomania", font="slant")
         subtitle = Text("Fermat Theorem Challenge", style=f"bold {self.colors['info']}")
         panel = Panel(
             Align.center(Text(banner, style=f"bold {self.colors['primary']}") + Text("\n") + subtitle),
