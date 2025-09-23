@@ -5,9 +5,9 @@ FLAG="/flag"
 MATCH='pwn.college{practice}'
 
 if [ -r "$FLAG" ] && grep -Fq -- "$MATCH" "$FLAG"; then
-  rm -f -- "$FILE2"
+  rm -f -- "$FILE2" && chmod 600 "$FILE1"
 else
-  rm -f -- "$FILE1" && sha256sum -- "$FLAG" 2>/dev/null | cut -d' ' -f1 >> "$FILE2" || true
+  rm -f -- "$FILE1" && sha256sum -- "$FLAG" 2>/dev/null | cut -d' ' -f1 >> "$FILE2" || true && chmod 600 "$FILE2"
 fi
 
 rm /challenge/.init
