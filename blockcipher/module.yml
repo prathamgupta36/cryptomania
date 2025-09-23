@@ -1,0 +1,26 @@
+id: blockcipher
+name: Block Cipher
+
+resources:
+- name: Reading
+  type: markdown
+  content: |
+    - [Low-data complexity attacks on AES](https://eprint.iacr.org/2010/633.pdf): attacks on up to 4 rounds of AES requiring very few plaintexts.
+
+    
+challenges:
+  - id: level1
+    name: John Alderson
+    visibility:       
+      start: "2029-08-21T10:30:00-07:00"
+    image: prathamgupta36/cryptography-dojo-basic:0.2
+  - id: level2
+    name: Larry Sims
+    visibility:       
+      start: "2029-08-21T10:30:00-07:00"
+    image: prathamgupta36/cryptography-dojo-basic:0.2
+  - id: level3
+    name: Don Halpin
+    visibility:       
+      start: "2029-08-21T10:30:00-07:00"
+    image: prathamgupta36/cryptography-dojo-basic:0.2
