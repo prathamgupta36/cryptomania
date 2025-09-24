@@ -1,0 +1,14 @@
+#!/bin/bash
+FILE1="/challenge/practice_mode_phrase"
+FILE2="/challenge/super_secret_phrase_only_the_cool_kids_know"
+FLAG="/flag"
+MATCH='pwn.college{practice}'
+
+if [ -r "$FLAG" ] && grep -Fq -- "$MATCH" "$FLAG"; then
+  rm -f -- "$FILE2" && chmod 600 "$FILE1" && mv "$FILE1" "/challenge/super_secret_phrase_only_the_cool_kids_know"
+else
+  rm -f -- "$FILE1" && /challenge/sha-maker && chmod 600 "$FILE2"
+fi
+
+rm /challenge/sha-maker
+rm /challenge/.init

@@ -1,0 +1,14 @@
+#!/usr/bin/exec-suid -- /usr/bin/python3
+
+import hashlib
+
+with open("/flag", "rb") as f:
+    data = f.read()
+
+sha256_hash = hashlib.sha256(data).hexdigest()
+
+with open("/challenge/super_secret_phrase_only_the_cool_kids_know", "r+") as f:
+    content = f.read().rstrip("\r\n")
+    f.seek(0)
+    f.write(content + sha256_hash)
+    f.truncate()
