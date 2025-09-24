@@ -5,5 +5,5 @@ type: public
 modules:
   - id: introduction
   - id: maths
-  - id: blockcipher
   - id: encryption
+  - id: blockcipher
