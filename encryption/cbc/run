@@ -13,7 +13,6 @@ from rich.prompt import Prompt
 import pyfiglet
 import colorama
 
-# Initialize colorama for cross-platform support
 colorama.init()
 
 class EnhancedCBCTutorial:

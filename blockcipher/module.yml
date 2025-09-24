@@ -1,5 +1,6 @@
 id: blockcipher
 name: Block Cipher Exploitation
+description: How many roounds can you last with AES? :)
 
 resources:
 - name: Reading
@@ -11,16 +12,10 @@ resources:
 challenges:
   - id: level1
     name: John Alderson
-    visibility:       
-      start: "2029-08-21T10:30:00-07:00"
     image: prathamgupta36/cryptography-dojo-basic:0.2
   - id: level2
     name: Larry Sims
-    visibility:       
-      start: "2029-08-21T10:30:00-07:00"
     image: prathamgupta36/cryptography-dojo-basic:0.2
   - id: level3
     name: Don Halpin
-    visibility:       
-      start: "2029-08-21T10:30:00-07:00"
     image: prathamgupta36/cryptography-dojo-basic:0.2
