@@ -3,6 +3,7 @@
 import os, binascii
 import AES_implementation as aes_mod
 import pyfiglet
+from colorama import Fore
 
 KEY = os.urandom(16)
 SECRET_PATH = "/challenge/super_secret_phrase_only_the_cool_kids_know"
@@ -21,13 +22,13 @@ for i in range(0, len(secret_padded), 16):
 
 stored_cipher_hex = (b"".join(cts)).hex().lower()
 
-print(pyfiglet.figlet_format("MIKE TYSON'S PUNSH OUT", font="larry3d"))
+print(Fore.LIGHTYELLOW_EX + pyfiglet.figlet_format("MIKE TYSON'S PUNSH OUT", font="larry3d"))
 
 while True:
-    print("1) Encrypt your phrase of choice (3-round AES)")
-    print("2) Show encrypted super secret phrase")
-    print("3) Do you know the phrase?")
-    print("4) Exit\n")
+    print(Fore.GREEN + "1) Encrypt your phrase of choice (3-round AES)")
+    print(Fore.CYAN + "2) Show encrypted super secret phrase")
+    print(Fore.YELLOW + "3) Do you know the phrase?")
+    print(Fore.WHITE + "4) Exit\n")
 
 
     choice = input("Select an option (1-4): ").strip()

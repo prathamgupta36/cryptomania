@@ -1,5 +1,5 @@
 id: blockcipher
-name: Block Cipher
+name: Block Cipher Exploitation
 
 resources:
 - name: Reading
