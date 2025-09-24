@@ -34,7 +34,7 @@ while True:
     choice = input("Select an option (1-4): ").strip()
 
     if choice == "1":
-        pt = input("Phrase to encrypt: ").encode()
+        pt = bytes.fromhex(input("Phrase to encrypt: ").strip())
         rem = len(pt) % 16
         if rem != 0:
             padlen = 16 - rem

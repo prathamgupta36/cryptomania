@@ -56,10 +56,10 @@ class EnhancedCBCTutorial:
                 for _ in range(10):
                     revealed[i] = random.choice('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789')
                     self.console.print("".join(revealed), end="\r")
-                    time.sleep(0.1)
+                    time.sleep(0.06)
                 revealed[i] = ch
             self.console.print("".join(revealed), end="\r")
-            time.sleep(0.1)
+            time.sleep(0.06)
         self.console.print("\n")
 
     def demonstrate_cbc(self):
@@ -82,23 +82,66 @@ class EnhancedCBCTutorial:
             time.sleep(0.5)
         self.console.print()
 
-    def challenge(self):
-        self.console.rule(Text("Your CBC Challenge", style=f"bold {self.colors['secondary']}"))
-        time.sleep(0.3)
-        IV = hex(random.getrandbits(48))[2:].zfill(12)
-        KEY = hex(random.getrandbits(48))[2:].zfill(12)
-        PT1 = hex(random.getrandbits(48))[2:].zfill(12)
-        PT2 = hex(random.getrandbits(48))[2:].zfill(12)
-        XOR_PT1 = hex(int(PT1,16) ^ int(IV,16))[2:].zfill(12)
-        CT1 = hex(random.getrandbits(48))[2:].zfill(12)
-        XOR_PT2 = hex(int(PT2,16) ^ int(CT1,16))[2:].zfill(12)
-        CT2 = hex(random.getrandbits(48))[2:].zfill(12)
+    def _enk(self, hex_block: str, key_hex: str) -> str:
+        return hex(int(hex_block, 16) ^ int(key_hex, 16))[2:].zfill(len(key_hex))
+
+    def _gen_params(self, bits=128):
+        width = bits // 4
+        IV = hex(random.getrandbits(bits))[2:].zfill(width)
+        KEY = hex(random.getrandbits(bits))[2:].zfill(width)
+        PT1 = hex(random.getrandbits(bits))[2:].zfill(width)
+        PT2 = hex(random.getrandbits(bits))[2:].zfill(width)
+        return IV, KEY, PT1, PT2
+
+    def learn_flow(self):
+        self.console.rule(Text("Learn: CBC Visualization", style=f"bold {self.colors['secondary']}"))
+        time.sleep(0.2)
+        self.demonstrate_cbc()
+        self.console.print(Text("That demonstrated block chaining and XORing with the previous ciphertext/IV.\n"
+                                "Use 'Tutorial' to see a full numeric example with a hidden toy cipher.\n", style=f"{self.colors['info']}"))
+
+    def tutorial_flow(self):
+        self.console.rule(Text("Tutorial: Full walkthrough (KEY shown)", style=f"bold {self.colors['secondary']}"))
+        IV, KEY, PT1, PT2 = self._gen_params(bits=128)
+
+        XOR_PT1 = hex(int(PT1,16) ^ int(IV,16))[2:].zfill(len(IV))
+        CT1 = self._enk(XOR_PT1, KEY)
+
+        XOR_PT2 = hex(int(PT2,16) ^ int(CT1,16))[2:].zfill(len(IV))
+        CT2 = self._enk(XOR_PT2, KEY)
 
         table = Table(show_header=True, header_style=f"bold {self.colors['primary']}")
         table.add_column("Parameter", style="cyan")
         table.add_column("Value", style="green")
         table.add_row("IV", IV)
         table.add_row("Key", KEY)
+        table.add_row("PT1", PT1)
+        table.add_row("PT1 ⊕ IV", XOR_PT1)
+        table.add_row("CT1 (E(KEY, PT1⊕IV))", CT1)
+        table.add_row("PT2", PT2)
+        table.add_row("PT2 ⊕ CT1", XOR_PT2)
+        table.add_row("CT2 (E(KEY, PT2⊕CT1))", CT2)
+        self.console.print(table)
+
+        self.console.print(Text("\nThis is the tutorial mode: KEY is visible and you can verify the computations above.\n", style=f"{self.colors['info']}"))
+        flag = "pwn.college{tutorial_flag}"
+        self.shuffle_reveal(flag)
+
+    def solve_flow(self):
+        self.console.rule(Text("Solve: Compute CT2 (KEY hidden)", style=f"bold {self.colors['secondary']}"))
+        IV, KEY, PT1, PT2 = self._gen_params(bits=128)
+
+        XOR_PT1 = hex(int(PT1,16) ^ int(IV,16))[2:].zfill(len(IV))
+        CT1 = self._enk(XOR_PT1, KEY)
+
+        XOR_PT2 = hex(int(PT2,16) ^ int(CT1,16))[2:].zfill(len(IV))
+        CT2 = self._enk(XOR_PT2, KEY)
+
+        table = Table(show_header=True, header_style=f"bold {self.colors['primary']}")
+        table.add_column("Parameter", style="cyan")
+        table.add_column("Value", style="green")
+        table.add_row("IV", IV)
+        table.add_row("Key", "[hidden]")           
         table.add_row("PT1", PT1)
         table.add_row("PT1 ⊕ IV", XOR_PT1)
         table.add_row("CT1", CT1)
@@ -109,26 +152,47 @@ class EnhancedCBCTutorial:
 
         user = Prompt.ask("Compute CT2 (in hex)")
         correct = CT2
-        if user.lower() == correct:
-            self.console.print(Text("Correct! Now you understand CBC.", style=f"bold {self.colors['success']}"))
+        if user.lower() == correct.lower():
+            self.console.print(Text("Correct! Now you understand the toy CBC. Revealing flag...", style=f"bold {self.colors['success']}"))
             time.sleep(0.3)
             flag = self.load_flag()
             self.shuffle_reveal(flag)
         else:
-            self.console.print(Text(f"Incorrect. CT2 was {correct}", style=f"bold {self.colors['error']}"))
+            self.console.print(Text("Incorrect. Try again (no hints given).", style=f"bold {self.colors['error']}"))
+
+    def menu(self):
+        while True:
+            self.console.clear()
+            self.display_banner()
+            choice = Prompt.ask(
+                "Choose mode",
+                choices=["learn", "tutorial", "solve", "exit"],
+                default="learn"
+            )
+            if choice == "learn":
+                self.learn_flow()
+            elif choice == "tutorial":
+                self.tutorial_flow()
+            elif choice == "solve":
+                self.solve_flow()
+            elif choice == "exit":
+                self.console.print(Text("Goodbye — stay curious!", style=f"{self.colors['info']}"))
+                break
+
+            self.console.print()
+            time.sleep(1.0)
+            Prompt.ask("Press Enter to return to menu", default="")
 
     def load_flag(self):
         try:
             return Path("/flag").read_text().strip()
         except:
-            return "FLAG{demo_flag_not_found}"
+            return "pwn.college{demo}"
 
     def run(self):
         self.console.clear()
-        self.display_banner()
-        self.demonstrate_cbc()
-        self.challenge()
+        self.menu()
+
 
 if __name__ == "__main__":
     EnhancedCBCTutorial().run()
-
