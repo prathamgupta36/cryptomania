@@ -1,6 +1,6 @@
 #!/usr/bin/exec-suid -- /usr/bin/python3
 try: 
-    with open('./company_password.txt', 'r') as f:
+    with open('/challenge/company_password.txt', 'r') as f:
         password = f.read().strip()
 except FileNotFoundError:
     print('Error fetching company_password')

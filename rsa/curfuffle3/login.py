@@ -6,7 +6,7 @@ console = Console()
 console.print(Panel.fit("🔒 Super Secure 🔒", title="Some company", style="bold cyan"))
 print()
 
-with open("./company_password.txt","r") as f:
+with open("/challenge/company_password.txt","r") as f:
     company_password = f.read().strip()
 
 pw = input("password: ").strip()

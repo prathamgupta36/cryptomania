@@ -2,6 +2,6 @@
 
 password=$(tr -dc '0-9' < /dev/urandom | head -c 32)
 
-echo "$password" > company_password.txt
+echo "$password" > /challenge/company_password.txt
 
 chmod 400 /challenge/company_password.txt
