@@ -68,7 +68,7 @@ try:
     gnums = re.findall(r"-?\d+", guess2)
     if len(gnums) >= 2:
         gu, gv = int(gnums[0]), int(gnums[1])
-        ok = (gu, gv) in {(u2, v2), (-u2, -v2), (v2, u2), (-v2, -u2)}
+        ok = same_up_to_sign(gu, u) and same_up_to_sign(gv, v)
         if not ok:
             print("\nNope. That’s not the correct point.")
             sys.exit(0)
