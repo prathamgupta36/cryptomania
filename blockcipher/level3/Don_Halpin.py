@@ -22,19 +22,29 @@ for i in range(0, len(secret_padded), 16):
 
 stored_cipher_hex = (b"".join(cts)).hex().lower()
 
+def _rowmajor_to_colmajor_bytes(block: bytes) -> bytes:
+    if len(block) != 16:
+        return block
+    # Convert row-major flattened state -> original column-major linear order
+    state = [list(block[i:i+4]) for i in range(0, 16, 4)]
+    out = bytearray(16)
+    for col in range(4):
+        for row in range(4):
+            out[col * 4 + row] = state[row][col]
+    return bytes(out)
+
 print(Fore.LIGHTYELLOW_EX + pyfiglet.figlet_format("MIKE TYSON'S PUNSH OUT", font="larry3d"))
-
 while True:
-    print(Fore.GREEN + "1) Encrypt your phrase of choice (3-round AES)")
-    print(Fore.CYAN + "2) Show encrypted super secret phrase")
-    print(Fore.YELLOW + "3) Do you know the phrase?")
-    print(Fore.WHITE + "4) Exit\n")
+    print(Fore.GREEN   + "1) Encrypt your phrase of choice (3-round AES)")
+    print(Fore.CYAN    + "2) Show encrypted super secret phrase")
+    print(Fore.YELLOW  + "3) Do you know the phrase?")
+    print(Fore.MAGENTA + "4) Decrypt stored secret phrase (QOL update)")
+    print(Fore.WHITE   + "5) Exit\n")
 
-
-    choice = input("Select an option (1-4): ").strip()
+    choice = input("Select an option (1-5): ").strip()
 
     if choice == "1":
-        pt = bytes.fromhex(input("Phrase to encrypt: ").strip())
+        pt = input("Phrase to encrypt: ").encode()
         rem = len(pt) % 16
         if rem != 0:
             padlen = 16 - rem
@@ -45,10 +55,10 @@ while True:
             cts.append(aes_mod.encrypt(pt[i:i+16], KEY, num_rounds=3))
 
         all_ct = b"".join(cts)
-        print("\nCiphertext (hex):", (all_ct).hex(), "\n")
+        print("\nCiphertext (hex):", all_ct.hex(), "\n")
 
         for idx, ct in enumerate(cts):
-            print(f"block {idx:02d}: {(ct).hex()}")
+            print(f"block {idx:02d}: {ct.hex()}")
         print()
 
     elif choice == "2":
@@ -72,11 +82,41 @@ while True:
             break
         else:
             print("\nIncorrect phrase :(, might be time to go train your boxing skills.\n")
-    
+
     elif choice == "4":
+        key_hex = input("Enter AES key (hex): ").strip()
+        # Minimal hardening to avoid crashes on bad input
+        try:
+            key = bytes.fromhex(key_hex)
+        except ValueError:
+            print("\nERROR: key must be valid hex (32 hex chars).\n")
+            continue
+        if len(key) != 16:
+            print("\nERROR: key must be 16 bytes (32 hex chars).\n")
+            continue
+
+        ct_all = bytes.fromhex(stored_cipher_hex)
+        plaintext_blocks = []
+        for i in range(0, len(ct_all), 16):
+            block = ct_all[i:i+16]
+            pt_block = aes_mod.decrypt(block, key, num_rounds=3)
+            pt_block = _rowmajor_to_colmajor_bytes(pt_block)
+            plaintext_blocks.append(pt_block)
+
+        all_pt = b"".join(plaintext_blocks)
+        padlen = all_pt[-1]
+        if 1 <= padlen <= 16 and all_pt.endswith(bytes([padlen]) * padlen):
+            all_pt = all_pt[:-padlen]
+
+        try:
+            print("Decrypted secret (utf-8):", all_pt.decode('utf-8'))
+        except Exception:
+            print("Decrypted secret could not be decoded as UTF-8.")
+        print()
+
+    elif choice == "5":
         print("\nCan't beat Iron Mike\n")
         break
 
     else:
         print("Invalid selection.")
-
