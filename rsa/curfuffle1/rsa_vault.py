@@ -49,7 +49,7 @@ def list_accounts():
     print()
 
 
-with open('./company_password.txt', 'r') as f:
+with open('/challenge/company_password.txt', 'r') as f:
     company_password = f.read().strip()
 
 e, d = create_account()

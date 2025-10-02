@@ -39,16 +39,13 @@ def create_recipient(M):
     c = encrypt(N, M)
     accounts.append({"N": N, "ct": c})
 
-with open("./company_password.txt", "r") as m:
+with open("/challenge/company_password.txt", "r") as m:
     m = m.read().strip()
 M = bytes_to_long(m.encode())
 
 for _ in range(e):
     create_recipient(M)
 
-# --------------------------
-# Simple UI
-# --------------------------
 while True:
     print("Welcome, please choose an action:")
     print("1: List accounts (N, e, c)")
