@@ -38,7 +38,7 @@ def shuffle_reveal(console: Console, flag: str, colors: dict):
         for _ in range(10):
             revealed[i] = random.choice('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789')
             console.print("".join(revealed), end="\r")
-            time.sleep(0.05)
+            time.sleep(0.02)
             
         revealed[i] = ch
         console.print("".join(revealed), end="\r")

@@ -20,3 +20,6 @@ challenges:
   - id: cbc-mac
     name: The Chained Authenticator
     image: prathamgupta36/cryptomania-math-basics
+  - id: cbc-mac-random-iv
+    name: Big Mac
+    image: prathamgupta36/cryptomania-math-basics
