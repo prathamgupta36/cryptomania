@@ -6,5 +6,5 @@ wait $pid
 
 rm -f /challenge/entry_gen.py /challenge/entry_gen.sage
 
-chmod 666 /challenge/challenge_entries
+chmod 644 /challenge/challenge_entries
 
