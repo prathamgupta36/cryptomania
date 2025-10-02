@@ -1,0 +1,4 @@
+# ---------------- CONFIGURE THIS IF YOU WANT TO VIEW A DIFFERENT BASIS ----------------
+V1 = (6513996, 6393464)
+V2 = (66586820, 65354729)
+basis = [V1, V2] 

@@ -1,0 +1,124 @@
+#!/usr/bin/exec-suid -- /usr/bin/python3
+
+import os
+import time
+import random
+from pathlib import Path
+from rich.console import Console
+from rich.panel import Panel
+from rich.prompt import Prompt
+from rich.text import Text
+import pyfiglet
+import hashlib
+from termcolor import colored
+
+def display_art(text, font='block', fill_char='█'):
+    raw = pyfiglet.figlet_format(text, font=font)
+    solid = "".join(fill_char if c not in (" ", "\n") else c for c in raw)
+    return solid
+
+def load_flag():
+    return Path('/flag').read_text().strip()
+
+def shuffle_reveal(console: Console, flag: str, colors: dict):
+    panel = Panel(Text("Decoding flag...", style=f"bold {colors['primary']}"),
+                  border_style=colors['secondary'])
+    console.print(panel)
+    time.sleep(0.75)
+
+    revealed = ['_'] * len(flag)
+    for i, ch in enumerate(flag):
+        if ch in '{}_':
+            revealed[i] = ch
+            console.print("".join(revealed), end="\r")
+            time.sleep(0.08)
+            continue
+
+        for _ in range(10):
+            revealed[i] = random.choice('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789')
+            console.print("".join(revealed), end="\r")
+            time.sleep(0.05)
+            
+        revealed[i] = ch
+        console.print("".join(revealed), end="\r")
+        time.sleep(0.05)
+
+    console.print("\n")
+    return "".join(revealed)
+
+def main():
+    console = Console()
+    colors = {
+        'primary': 'magenta',
+        'secondary': 'bright_magenta'
+    }
+
+    title = display_art('Blueprint')
+    console.print(title, style="bold blue")
+    console.print(
+        Panel("[bold]Project Argus: Cryptographic Construct Activation[/bold]",
+              title="[cyan]STATUS[/cyan]",
+              subtitle="[cyan]ONLINE[/cyan]",
+              border_style="blue")
+    )
+
+    challenge_text = Text.from_markup(
+        f"""
+Welcome, Cryptologist.
+
+A cryptographic construct with a weak collision resistance has been detected. Your task is to demonstrate its vulnerability.
+
+[bold]Construct ID:[/bold] WEAK-HASH-COLLISION
+[bold]Activation Protocol:[/bold] Find two different messages (at least 32 bytes long) that produce the same 5-byte SHAKE256 hash.
+"""
+    )
+    console.print(Panel(challenge_text, title="[bold blue]Activation Schematic[/bold blue]", border_style="blue", padding=(1, 2)))
+
+    message_a_hex = Prompt.ask("[bold green]Please input your first message (in hex)[/bold green]")
+    message_b_hex = Prompt.ask("[bold green]Please input your second message (in hex)[/bold green]")
+
+    try:
+        message_a = bytes.fromhex(message_a_hex)
+        message_b = bytes.fromhex(message_b_hex)
+
+        if message_a == message_b:
+            console.print(Panel("[bold red]Don't submit two identical inputs![/bold red]", title="[bold red]INPUT ERROR[/bold red]", border_style="red"))
+            return
+
+        if len(message_a) < 32 or len(message_b) < 32:
+            console.print(Panel("[bold red]Insufficient message length (must be at least 32 bytes).[/bold red]", title="[bold red]INPUT ERROR[/bold red]", border_style="red"))
+            return
+
+        shake_a = hashlib.shake_256()
+        shake_a.update(message_a)
+        hash_a = shake_a.hexdigest(5)
+
+        shake_b = hashlib.shake_256()
+        shake_b.update(message_b)
+        hash_b = shake_b.hexdigest(5)
+
+        if hash_a == hash_b:
+            console.print(Panel(Text.from_markup("[bold green]VULNERABILITY CONFIRMED[/bold green]\n\n" 
+                                                "The construct has been successfully bypassed.\n\n" 
+                                                "[bold]Flag:[/bold]"),
+                                title="[bold green]STATUS: SUCCESS[/bold green]", border_style="green"))
+            flag = load_flag()
+            final_flag = shuffle_reveal(console, flag, colors)
+            console.print(Panel(f"[bold]Final Flag:[/bold] {final_flag}", border_style="green"))
+        else:
+            failure_text = Text.from_markup(f"""
+[bold red]BYPASS FAILED[/bold red]
+
+Hash of message A: {hash_a}
+Hash of message B: {hash_b}
+
+The hashes do not match.
+"""
+            )
+            console.print(Panel(failure_text, title="[bold red]STATUS: FAILURE[/bold red]", border_style="red"))
+
+    except ValueError:
+        console.print(Panel("[bold red]Invalid hex input.[/bold red]", title="[bold red]INPUT ERROR[/bold red]", border_style="red"))
+
+if __name__ == "__main__":
+    main()

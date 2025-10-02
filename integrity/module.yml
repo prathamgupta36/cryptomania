@@ -1,0 +1,22 @@
+id: integrity
+name: Project Argus Integrity Wing
+    
+challenges:
+  - id: sha3
+    name: The Keccak Blueprint
+    image: prathamgupta36/cryptomania-math-basics
+  - id: shake
+    name: The Malleable Cipher
+    image: prathamgupta36/cryptomania-math-basics
+  - id: preimage-resistance
+    name: The One-Way Cog
+    image: prathamgupta36/cryptomania-math-basics
+  - id: collision-resistance
+    name: The Uniqueness Engine
+    image: prathamgupta36/cryptomania-math-basics
+  - id: length-extension
+    name: The Appended Secret
+    image: prathamgupta36/cryptomania-math-basics
+  - id: cbc-mac
+    name: The Chained Authenticator
+    image: prathamgupta36/cryptomania-math-basics

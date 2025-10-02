@@ -1,0 +1,41 @@
+id: lattice
+name: Live Laugh Lattice
+
+resources:
+
+- type: header
+  content: Pre LLL
+- id: walkthru
+  name: Baby Gauss
+  type: challenge
+  allow_privileged: false
+- id: level1
+  name: level1
+  type: challenge
+- id: level2
+  name: level2
+  type: challenge
+- id: level3
+  name: level3
+  type: challenge
+- id: level4
+  name: level4
+  type: challenge
+- type: header
+  content: Post LLL
+- id: lllwalkthru
+  name: Baby LLL
+  type: challenge
+  allow_privileged: false
+- id: level5
+  name: level5
+  type: challenge
+- id: knapsack
+  name: level7
+  type: challenge
+- type: header
+  content: Coppersmith
+- id: coppersmith
+  name: coppersmith1
+  type: challenge
+

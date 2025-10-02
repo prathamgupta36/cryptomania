@@ -1,0 +1,109 @@
+#!/usr/bin/exec-suid -- /usr/bin/python3
+
+import os
+import time
+import random
+from pathlib import Path
+from rich.console import Console
+from rich.panel import Panel
+from rich.prompt import Prompt
+from rich.text import Text
+import pyfiglet
+import hashlib
+from termcolor import colored
+import base64
+
+MESSAGE = (hashlib.sha256(open("/flag", "rb").read().strip()).digest()).hex()
+snake = hashlib.shake_256()
+snake.update(MESSAGE.encode())
+CORRECT_HASH = snake.hexdigest(16)
+
+def display_art(text, font='block', fill_char='█'):
+    raw = pyfiglet.figlet_format(text, font=font)
+    solid = "".join(fill_char if c not in (" ", "\n") else c for c in raw)
+    return solid
+
+def load_flag():
+    return Path('/flag').read_text().strip()
+
+def shuffle_reveal(console: Console, flag: str, colors: dict):
+    panel = Panel(Text("Decoding flag...", style=f"bold {colors['primary']}"),
+                  border_style=colors['secondary'])
+    console.print(panel)
+    time.sleep(0.75)
+
+    revealed = ['_'] * len(flag)
+    for i, ch in enumerate(flag):
+        if ch in '{}__':
+            revealed[i] = ch
+            console.print("".join(revealed), end="\r")
+            time.sleep(0.08)
+            continue
+
+        for _ in range(10):
+            revealed[i] = random.choice('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789')
+            console.print("".join(revealed), end="\r")
+            time.sleep(0.05)
+            
+        revealed[i] = ch
+        console.print("".join(revealed), end="\r")
+        time.sleep(0.05)
+
+    console.print("\n")
+    return "".join(revealed)
+
+def main():
+    console = Console()
+    colors = {
+        'primary': 'magenta',
+        'secondary': 'bright_magenta'
+    }
+
+    title = display_art('Blueprint')
+    console.print(title, style="bold blue")
+    console.print(
+        Panel("[bold]Project Argus: Cryptographic Construct Activation[/bold]",
+              title="[cyan]STATUS[/cyan]",
+              subtitle="[cyan]ONLINE[/cyan]",
+              border_style="blue")
+    )
+
+    challenge_text = Text.from_markup(
+        f"""
+Welcome, Cryptologist.
+
+Your task is to activate this cryptographic construct by providing the correct control hash.
+
+[bold]Construct ID:[/bold] SHAKE256
+[bold]Activation Protocol:[/bold] Compute the SHAKE256 hash of the following message (16-byte output).
+
+[bold yellow]Message:[/bold yellow] '{MESSAGE}'
+"""
+    )
+    console.print(Panel(challenge_text, title="[bold blue]Activation Schematic[/bold blue]", border_style="blue", padding=(1, 2)))
+
+    submitted_hash = Prompt.ask("[bold green]Please input your computed digest[/bold green]")
+
+    if submitted_hash.strip() == CORRECT_HASH:
+        console.print(Panel(Text.from_markup("[bold green]ACTIVATION SUCCESSFUL[/bold green]\n\n" 
+                                            "Correct Hash: " + CORRECT_HASH + "\n\n" 
+                                            "The SHAKE256 construct is now online. You have retrieved a piece of the master design.\n\n" 
+                                            "[bold]Flag:[/bold]"),
+                            title="[bold green]STATUS: SUCCESS[/bold green]", border_style="green"))
+        flag = load_flag()
+        final_flag = shuffle_reveal(console, flag, colors)
+        console.print(Panel(f"[bold]Final Flag:[/bold] {final_flag}", border_style="green"))
+
+    else:
+        failure_text = Text.from_markup(f"""
+[bold red]ACTIVATION FAILED[/bold red]
+
+Submitted Hash: {submitted_hash}
+Expected Hash: {CORRECT_HASH[:3]}...
+
+The construct rejected the control hash. Please verify your implementation.
+""")
+        console.print(Panel(failure_text, title="[bold red]STATUS: FAILURE[/bold red]", border_style="red"))
+
+if __name__ == "__main__":
+    main()

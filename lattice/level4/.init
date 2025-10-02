@@ -1,0 +1,10 @@
+#!/bin/bash
+
+cd /challenge && /challenge/entry_gen.py &
+pid=$!
+wait $pid
+
+rm -f /challenge/entry_gen.py /challenge/entry_gen.sage
+
+chmod 666 /challenge/challenge_entries
+
