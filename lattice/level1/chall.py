@@ -60,15 +60,14 @@ c2 = mul2v(U_inv, k2)
 
 print("\nWell done. The expedition just realized they misplaced *another* shipment.")
 print("Guess who’s stuck finding it? :)\n")
-print(f"c2 = [{c2[0]} {c2[1]}] ") 
-
+print(f"c2 =\n[{c2[0]} {c2[1]}] ") 
 
 try:
     guess2 = input("\nSubmit your recovered coordinates as 'u v': ").strip()
     gnums = re.findall(r"-?\d+", guess2)
     if len(gnums) >= 2:
         gu, gv = int(gnums[0]), int(gnums[1])
-        ok = same_up_to_sign(gu, u) and same_up_to_sign(gv, v)
+        ok = same_up_to_sign(gu, u2) and same_up_to_sign(gv, v2)
         if not ok:
             print("\nNope. That’s not the correct point.")
             sys.exit(0)
