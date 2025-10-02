@@ -24,7 +24,7 @@ print()
 
 print("Row norms (squared):")
 for i, v in enumerate(BASIS, start=1):
-    print(f"  v{i} ||^2 = {squared_norm(v)}")
+    print(f" ||v{i}||^2 = {squared_norm(v)}")
 print()
 
 H0 = hadamard_ratio(BASIS)
@@ -87,7 +87,7 @@ while k <= n:
 
     print("Row norms (squared):")
     for i, v in enumerate(basis, start=1):
-        print(f"  v{i} ||^2 = {squared_norm(v)}")
+        print(f"||v{i}||^2 = {squared_norm(v)}")
     print()
 
     H = hadamard_ratio(basis)
