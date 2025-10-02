@@ -1,5 +1,4 @@
-#!/usr/bin/exec-suid -- /usr/bin/python3
-
+#!/usr/bin/env python3
 from Crypto.Util.number import getPrime, bytes_to_long
 from math import gcd
 from rich.console import Console

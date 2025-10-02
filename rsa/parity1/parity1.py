@@ -1,4 +1,3 @@
-#!/usr/bin/exec-suid -- /usr/bin/python3
 from Crypto.Util.number import getPrime
 from secrets import randbelow
 
