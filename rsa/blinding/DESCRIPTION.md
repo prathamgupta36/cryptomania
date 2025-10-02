@@ -1,0 +1,1 @@
+Bob might not be famous, but there's value in getting his signature. Get Bob's signature for a certain message by getting him to sign a completely different message! 

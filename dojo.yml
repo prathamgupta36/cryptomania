@@ -1,11 +1,12 @@
 id: cryptomania
-name: Cryptomania
+name: Cryptographic Exploitation
 type: public
 
 modules:
   - id: introduction
   - id: maths
   - id: encryption
+  - id: rsa
   # - id: integrity
   - id: blockcipher
   - id: lattice

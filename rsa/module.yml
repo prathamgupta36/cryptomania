@@ -1,0 +1,16 @@
+id: rsa
+name: RSA
+
+challenges:
+  - id: curfuffle1
+    name: Curfuffle
+  - id: curfuffle2
+    name: Curfuffle 2
+  - id: curfuffle3
+    name: Curfuffle 3
+  - id: blinding
+    name: Blinding
+  - id: meddlingmiddle
+    name: meddlingmiddle
+  - id: wiener
+    name: Wiener
