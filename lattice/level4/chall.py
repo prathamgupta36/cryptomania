@@ -3,7 +3,7 @@ import json, random, sys, os
 from math import hypot
 import re
 
-ENTRIES_PATH = "challenge_entries"  
+ENTRIES_PATH = "/challenge/challenge_entries"  
 REVEAL_ON_FAIL = True
 
 def print_matrix(M):
