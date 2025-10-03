@@ -29,7 +29,6 @@ while True:
         if 1 < e < phi:
             break
 
-print(d)
 data = []
 
 def encrypt(m_int: int) -> int:
