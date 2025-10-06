@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/exec-suid -- /usr/bin/python3
 from Crypto.Util.number import getPrime, bytes_to_long, inverse 
 from random import getrandbits 
 from math import gcd
@@ -70,13 +70,14 @@ while True:
     except ValueError:
         print('ERROR: Please enter a valid number\n')
         continue
-    match action:
-        case 1: 
-            e, _ = create_account()
-            print(f'Account created! N = {N}, e = {e}\n')
-        case 2: list_accounts()
-        case 3:
-            print('Goodbye!')
-            exit()
-        case _: print('ERROR: Invalid choice\n')
 
+    if action == 1:
+        e, _ = create_account()
+        print(f'Account created! N = {N}, e = {e}\n')
+    elif action == 2:
+        list_accounts()
+    elif action == 3:
+        print('Goodbye!')
+        exit()
+    else:
+        print('ERROR: Invalid choice\n')
