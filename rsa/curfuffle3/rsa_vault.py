@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/exec-suid -- /usr/bin/python3
 from Crypto.Util.number import getPrime, bytes_to_long
 from math import gcd
 from rich.console import Console
@@ -57,16 +57,14 @@ while True:
         print("ERROR: Please enter a valid number\n")
         continue
 
-    match action:
-        case 1:
-            list_accounts()
-        case 2:
-            m = input("please provide a message: ")
-            m = bytes_to_long(m.encode())
-            create_recipient(m)
-        case 3:
-            print("Goodbye!")
-            exit()
-        case _:
-            print("ERROR: Invalid choice\n")
-
+    if action == 1:
+        list_accounts()
+    elif action == 2:
+        m = input("please provide a message: ")
+        m = bytes_to_long(m.encode())
+        create_recipient(m)
+    elif action == 3:
+        print("Goodbye!")
+        exit()
+    else:
+        print("ERROR: Invalid choice\n")
