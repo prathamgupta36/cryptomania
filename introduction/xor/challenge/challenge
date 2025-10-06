@@ -41,7 +41,7 @@ def xor_maker(plaintext: str, key: str, rounds: int = 3):
 
         ciphertext = new_ciphertext
     
-    print(f"\Encrypted Ciphertext (Hex): {ciphertext.encode().hex()}")
+    print(f"Encrypted Ciphertext (Hex): {ciphertext.encode().hex()}")
     return ciphertext
 
 def xor():
