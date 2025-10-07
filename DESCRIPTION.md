@@ -1,4 +1,4 @@
-## Welcome to Cryptomania
+## Welcome to Cryptographic Exploitation
 
 This dojo is going to delve into concepts of cryptography starting from super simple to complicated topics.
 
