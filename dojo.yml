@@ -7,6 +7,6 @@ modules:
   - id: maths
   - id: encryption
   - id: rsa
-  # - id: integrity
+  - id: integrity
   - id: blockcipher
   - id: lattice
