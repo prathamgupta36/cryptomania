@@ -23,3 +23,6 @@ challenges:
   - id: cbc-mac-random-iv
     name: Big Mac
     image: prathamgupta36/cryptomania-math-basics
+  - id: cbc-mac-length-extension
+    name: Forge Me
+    image: prathamgupta36/cryptomania-math-basics
