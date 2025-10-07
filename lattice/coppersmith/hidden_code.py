@@ -1,7 +1,7 @@
 from Crypto.Util.number import getPrime, bytes_to_long, long_to_bytes
 
 def check_poly(n, c, poly, mod):
-    b0 = bytes_to_long(b'Session Cookie: {user: "admin", secret: "') << 80
+    b0 = bytes_to_long(b'Session Cookie: {user: "admin", secret: "') << 144
     b1 = bytes_to_long(b'"}')
     m0 = b0 + b1    
     correct = [0]*4
