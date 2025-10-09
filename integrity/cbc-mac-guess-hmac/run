@@ -1,0 +1,119 @@
+#!/usr/bin/exec-suid -- /usr/bin/python3
+
+import os
+import time
+import random
+from pathlib import Path
+from rich.console import Console
+from rich.panel import Panel
+from rich.prompt import Prompt
+from rich.text import Text
+import pyfiglet
+import hashlib
+import hmac
+from termcolor import colored
+
+def display_art(text, font='block', fill_char='█'):
+    raw = pyfiglet.figlet_format(text, font=font)
+    solid = "".join(fill_char if c not in (" ", "\n") else c for c in raw)
+    return solid
+
+def load_flag():
+    return Path('/flag').read_text().strip()
+
+def shuffle_reveal(console: Console, flag: str, colors: dict):
+    panel = Panel(Text("Decoding flag...", style=f"bold {colors['primary']}"),
+                  border_style=colors['secondary'])
+    console.print(panel)
+    time.sleep(0.75)
+
+    revealed = ['_'] * len(flag)
+    for i, ch in enumerate(flag):
+        if ch in '{}_':
+            revealed[i] = ch
+            console.print("".join(revealed), end="\r")
+            time.sleep(0.08)
+            continue
+
+        for _ in range(10):
+            revealed[i] = random.choice('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789')
+            console.print("".join(revealed), end="\r")
+            time.sleep(0.05)
+            
+        revealed[i] = ch
+        console.print("".join(revealed), end="\r")
+        time.sleep(0.05)
+
+    console.print("\n")
+    return "".join(revealed)
+
+def main():
+    console = Console()
+    colors = {
+        'primary': 'magenta',
+        'secondary': 'bright_magenta'
+    }
+
+    title = display_art('Blueprint')
+    console.print(title, style="bold blue")
+    console.print(
+        Panel("[bold]Project Argus: Cryptographic Construct Activation[/bold]",
+              title="[cyan]STATUS[/cyan]",
+              subtitle="[cyan]ONLINE[/cyan]",
+              border_style="blue")
+    )
+
+    info = ["Alice", "Brown", "1987", "0524", "Boston", "MA", "8479024972", "2805", "Artist", "SAIC", "Football", "hiking", "traveling", "reading", "photographing" , "baking"]
+    special_char = ["!", "@", "#", "$", "%", "^", "&", "*"]
+
+    password = ""
+    for _ in range(4):
+        password += random.choice(info)
+        password += random.choice(special_char)
+
+    message = b"wire 100,000 dollars to Bob. -Alice"
+    correct_tag = hmac.new(password.encode(), message, hashlib.sha256).hexdigest()
+
+    challenge_text = Text.from_markup(
+        f"""
+Welcome, Cryptologist.
+
+Your task is to guess the HMAC private key (password) to authenticate a message.
+
+[bold]Construct ID:[/bold] HMAC-PASSWORD-GUESS
+[bold]Message:[/bold] {message.decode()}
+[bold]Tag:[/bold] {correct_tag}
+
+[bold]Password Hint:[/bold] The password is a concatenation of 4 random choices from the `info` list and 4 random choices from the `special_char` list.
+[bold]Info List:[/bold] {info}
+[bold]Special Char List:[/bold] {special_char}
+
+Your goal is to guess the correct password.
+"""
+    )
+    console.print(Panel(challenge_text, title="[bold blue]Password Guessing Challenge[/bold blue]", border_style="blue", padding=(1, 2)))
+
+    submitted_password = Prompt.ask("[bold green]Please input the password[/bold green]")
+
+    computed_tag = hmac.new(submitted_password.encode(), message, hashlib.sha256).hexdigest()
+    if computed_tag == correct_tag:
+        console.print(Panel(Text.from_markup("[bold green]AUTHENTICATION SUCCESSFUL[/bold green]\n\n" \
+                                            "The message has been authenticated.\n\n" \
+                                            "[bold]Flag:[/bold]"),
+                            title="[bold green]STATUS: SUCCESS[/bold green]", border_style="green"))
+        flag = load_flag()
+        final_flag = shuffle_reveal(console, flag, colors)
+        console.print(Panel(f"[bold]Final Flag:[/bold] {final_flag}", border_style="green"))
+    else:
+        failure_text = Text.from_markup(f"""
+[bold red]AUTHENTICATION FAILED[/bold red]
+
+Your computed tag: {computed_tag}
+Correct tag:      {correct_tag}
+
+The password is incorrect.
+""")
+        console.print(Panel(failure_text, title="[bold red]STATUS: FAILURE[/bold red]", border_style="red"))
+
+if __name__ == "__main__":
+    main()

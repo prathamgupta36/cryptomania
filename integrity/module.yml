@@ -26,3 +26,6 @@ challenges:
   - id: cbc-mac-length-extension
     name: Forge Me
     image: prathamgupta36/cryptomania-math-basics
+  - id: cbc-mac-guess-hmac
+    name: Guess My HMAC
+    image: prathamgupta36/cryptomania-math-basics
