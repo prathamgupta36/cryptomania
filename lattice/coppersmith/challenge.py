@@ -1,6 +1,6 @@
 #!/usr/bin/exec-suid -- /usr/bin/python3
 from Crypto.Util.number import getPrime, bytes_to_long, long_to_bytes
-from hidden_code import check_poly
+from hashlib import sha256
 import os
 
 p = getPrime(512)
@@ -22,9 +22,9 @@ message has a format. It is you task to correctly interpret this extra info and 
 knowledge into a modular polynomial that when coppersmiths method is applied will allow you to
 decrypt the full ciphertext. Your answer will be the list of coefficients in your polynomial with
 the lowest degree term first. For example, if f(x) = x^3 + 5x + 4, my answer would be "4,5,0,3".
-You will then be prompted for the modulus for the polynomial.
 
-NOTE: DO NOT reduce the coefficients of the polynomial by the desired modulus or the check will fail
+NOTE: You should be considering a polynomial under mod n, but DO NOT reduce the coefficients of the
+polynomial by the desired modulus or the check will fail.
 '''
 
 print(intro)
@@ -34,12 +34,12 @@ print(f"c={c}\n")
 
 raw_vec = input("Provide the coefficient vector for you polynomial as a comma seperated list of integers: ")
 poly = [int(x.strip()) for x in raw_vec.split(',')]
-mod = int(input("Provide the modulus of your polynomial: "))
+poly[0] += c
+submission = str(poly).encode()
 
-if check_poly(n, c, poly, mod):
+if sha256(submission).digest().hex() == "afe68879397a8909fd913f91169bc6fcf9b4388334e87066072cf5e259d186f4":
     print("\nGood Job!")
     print(open('/flag', 'r').read())
 else:
     print("You failed, better luck next time!")
-
 
