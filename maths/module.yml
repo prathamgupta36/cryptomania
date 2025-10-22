@@ -30,3 +30,5 @@ challenges:
     name: Final Boss
     image: prathamgupta36/cryptomania-math-basics
     progression_locked: true
+  - id: level5
+    name: Fun with Linear Algebra

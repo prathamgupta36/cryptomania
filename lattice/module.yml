@@ -27,9 +27,6 @@ resources:
   name: Baby LLL
   type: challenge
   allow_privileged: false
-- id: level5
-  name: level5
-  type: challenge
 - id: knapsack
   name: level7
   type: challenge
