@@ -4,6 +4,9 @@ type: public
 award: 
   emoji: 🔐
 
+pages:
+  - lattie/coppersmith
+
 modules:
   - id: introduction
   - id: maths

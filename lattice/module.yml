@@ -32,6 +32,9 @@ resources:
   type: challenge
 - type: header
   content: Coppersmith
+- type: markdown
+  name: Coppersmith 101
+  file: coppersmith.md
 - id: coppersmith
   name: coppersmith1
   type: challenge
