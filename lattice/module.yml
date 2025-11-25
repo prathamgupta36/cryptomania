@@ -30,6 +30,9 @@ resources:
 - id: knapsack
   name: level7
   type: challenge
+- id: ggh1 
+  name: GGH1
+  type: challenge
 - type: header
   content: Coppersmith
 - type: markdown
@@ -38,7 +41,3 @@ resources:
 - id: coppersmith
   name: coppersmith1
   type: challenge
-- id: ghh1 
-  name: GGH1
-  type: challenge
-
