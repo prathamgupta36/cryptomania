@@ -30,9 +30,6 @@ resources:
 - id: knapsack
   name: level7
   type: challenge
-- id: ggh1
-  name: level8
-  type: challenge
 - type: header
   content: Coppersmith
 - type: markdown
