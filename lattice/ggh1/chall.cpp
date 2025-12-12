@@ -58,7 +58,7 @@ int chall(){
 	Vec<ZZ> pt;
 	Vec<ZZ> ct;
 	
-	Priv_key.SetDims(lattice_dimension, lattice_dimension); //Sqaures are so much easier to work with :p
+	Priv_key.SetDims(lattice_dimension, lattice_dimension); // sqaures are so much easier to work with :p
 
 	Priv_key   = GetPrivKey(lattice_dimension, coefficient_range, desired_ratio);
 	
@@ -67,8 +67,8 @@ int chall(){
 	pt = GetRandVec(Public_key.NumCols(), 100);
 	ct = EncryptGGH(Public_key, pt, 5);
 
-	WriteMatrixCSV(Public_key, "public_key.csv");
-	WriteVectorCSV(ct, "cipher_text.csv");
+	WriteMatrixCSV(Public_key, "/challenge/public_key.csv");
+	WriteVectorCSV(ct, "/challenge/cipher_text.csv");
 
 	printf("Wrote Public key to public_key.csv\n");
 	printf("Wrote Cipher Text to cipher_text.csv\n\n");
@@ -78,7 +78,7 @@ int chall(){
 
 	if(user_vec == pt){
 		printf("Amazing!!!\n");
-		printf("Here is a flag for your troubles :)\n");
+		printf("Here is a flag for your troubles:\n");
 		ifstream f("/flag", ios::in | ios::binary);
 		if (!f) { perror("open /flag"); return 1; }
 		cout << f.rdbuf();

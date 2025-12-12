@@ -1,3 +1,21 @@
+#!/bin/bash
+
+
+touch /challenge/cipher_text.csv
+touch /challenge/public_key.csv
+chmod 666 /challenge/cipher_text.csv
+chmod 666 /challenge/public_key.csv
+
+/usr/bin/g++ /challenge/chall.cpp /challenge/GGH_cryptosystem.cpp /challenge/key_gen.cpp -o /challenge/chall -lntl -lgmp -lm
+
+
+chmod 444 /challenge/GGH_cryptosystem.cpp
+chmod 444 /challenge/GGH_cryptosystem.h
+chmod 444 /challenge/chall.cpp
+chmod 444 /challenge/key_gen.cpp
+chmod 444 /challenge/key_gen.h
+chmod 444 /challenge/libntl.so.44
+
 
 
 
