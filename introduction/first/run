@@ -56,7 +56,8 @@ def main():
         
         flag = load_flag()
         print("You have proved to be worthy! Here is your flag:")
-        shuffle_reveal(flag)
+        #shuffle_reveal(flag)
+        print(flag)
         
     else:
         print("Incorrect! Try again.")
