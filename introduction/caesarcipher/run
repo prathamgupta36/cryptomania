@@ -88,13 +88,14 @@ def main():
         print("Good job! You have successfully shifted a string by 3 letters.")
         print("\nWell done, the shifting you just did represents what we call a Caeser Cipher!")
 
-        time.sleep(0.2)        
+#        time.sleep(0.2)        
         
         flag = load_flag()
         
         print("You have proved to be worthy! Here is your flag:")
         
-        shuffle_reveal(flag)
+#        shuffle_reveal(flag)
+         print(flag)
     else:
         print("Incorrect! Try again.")
 
