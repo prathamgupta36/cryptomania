@@ -156,7 +156,8 @@ class EnhancedCBCTutorial:
             self.console.print(Text("Correct! Now you understand the toy CBC. Revealing flag...", style=f"bold {self.colors['success']}"))
             time.sleep(0.3)
             flag = self.load_flag()
-            self.shuffle_reveal(flag)
+            #self.shuffle_reveal(flag)
+            print(flag)
         else:
             self.console.print(Text("Incorrect. Try again (no hints given).", style=f"bold {self.colors['error']}"))
 
