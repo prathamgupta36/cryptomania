@@ -62,8 +62,8 @@ def main():
         time.sleep(0.2)
         
         print("You have proved to be worthy! Here is your flag:")
-        shuffle_reveal(flag)
-        
+        #shuffle_reveal(flag)
+        print(flag)
     else:
         print("Incorrect! Try again.")
 
