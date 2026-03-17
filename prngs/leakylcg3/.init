@@ -1,0 +1,14 @@
+#!/bin/bash
+
+printf "%u\n" "$(((RANDOM << 15) | RANDOM))" >/challenge/super_secret_seed
+
+/challenge/gen_rand.py # &
+# pid=$!
+# wait $pid
+
+rm -f /challenge/gen_rand.py
+
+chmod 400 /challenge/super_secret_seed
+chmod 400 /challenge/random
+chmod 400 /challenge/seed_table
+chmod 400 /challenge/sum_leak

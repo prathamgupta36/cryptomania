@@ -1,0 +1,72 @@
+id: prngs
+name: Pseudo-Random Number Generators
+description: Welcome to the world of Pseudo-random number generators, these are deterministic algorithms designed to produce sequences that look random, but their internal structure often makes them predictable when used incorrectly.
+  In this module, you will study and attack several classic PRNG families, including Park-Miller LCGs, Mersenne Twisters, and xorshift-based generators, with a focus on state recovery,
+  parameter recovery, and output prediction.
+
+
+resources:
+
+  - type: header
+    content: Park Miller LCG
+
+  - type: markdown
+    name: LCG 101
+    file: LCG.md
+
+  - type: challenge
+    id: seedwarmup
+    name: Seed warmup
+
+  - type: challenge
+    id: leakylcg1
+    name: Leaky LCG I
+    image: prathamgupta36/cryptomania-math-basics
+
+  - type: challenge
+    id: leakylcg2
+    name: Leaky LCG II
+    image: prathamgupta36/cryptomania-math-basics
+
+  - type: challenge
+    id: leakylcg3
+    name: Leaky LCG III
+    image: prathamgupta36/cryptomania-math-basics
+
+  - type: challenge
+    id: lockpicklcg1
+    name: Lockpick LCG I
+    image: prathamgupta36/cryptomania-math-basics
+
+  - type: challenge
+    id: lockpicklcg2
+    name: Lockpick LCG II
+    image: prathamgupta36/cryptomania-math-basics
+
+
+  - type: header
+    content: XORShift PRG
+
+  - type: markdown
+    name: Xorshift 101
+    file: Xorshift.md
+
+  - type: challenge
+    id: seedwarmup2
+    name: Seed warmup
+    image: prathamgupta36/cryptomania-math-basics
+
+  - type: challenge
+    id: xorcist1
+    name: XOR-cist I
+    image: prathamgupta36/cryptomania-math-basics
+
+  - type: challenge
+    id: xorcist2
+    name: XOR-cist II
+    image: prathamgupta36/cryptomania-math-basics
+
+  - type: challenge
+    id: xorcist3
+    name: XOR-cist III
+    image: prathamgupta36/cryptomania-math-basics

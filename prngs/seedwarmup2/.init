@@ -1,0 +1,9 @@
+#!/bin/bash
+
+/challenge/gen_rand.py # &
+# pid=$!
+# wait $pid
+
+rm -f /challenge/gen_rand.py
+
+chmod 400 /challenge/super_secret_seed

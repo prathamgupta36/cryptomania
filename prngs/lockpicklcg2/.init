@@ -1,0 +1,11 @@
+#!/bin/bash
+
+/challenge/gen_rand.py # &
+# pid=$!
+# wait $pid
+
+rm -f /challenge/gen_rand.py
+
+chmod 400 /challenge/params
+chmod 400 /challenge/expected_outputs
+chmod 400 /challenge/hidden_modulus

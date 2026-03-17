@@ -1,0 +1,4 @@
+#!/bin/bash
+
+printf "%u\n" "$(((RANDOM << 15) | RANDOM))" >/challenge/super_secret_seed
+chmod 400 /challenge/super_secret_seed
