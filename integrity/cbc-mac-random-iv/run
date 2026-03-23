@@ -1,104 +1,36 @@
 #!/usr/bin/exec-suid -- /usr/bin/python3
 
 import os
-import time
-import random
-from pathlib import Path
-from rich.console import Console
-from rich.panel import Panel
-from rich.prompt import Prompt
-from rich.text import Text
-import pyfiglet
-from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
-from termcolor import colored
 import hashlib
-
-def display_art(text, font='block', fill_char='█'):
-    raw = pyfiglet.figlet_format(text, font=font)
-    solid = "".join(fill_char if c not in (" ", "\n") else c for c in raw)
-    return solid
+from pathlib import Path
+from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 
 def load_flag():
-    return Path('/flag').read_text().strip()
-
-def shuffle_reveal(console: Console, flag: str, colors: dict):
-    panel = Panel(Text("Decoding flag...", style=f"bold {colors['primary']}"),
-                  border_style=colors['secondary'])
-    console.print(panel)
-    time.sleep(0.75)
-
-    revealed = ['_'] * len(flag)
-    for i, ch in enumerate(flag):
-        if ch in '{}_':
-            revealed[i] = ch
-            console.print("".join(revealed), end="\r")
-            time.sleep(0.08)
-            continue
-
-        for _ in range(10):
-            revealed[i] = random.choice('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789')
-            console.print("".join(revealed), end="\r")
-            time.sleep(0.02)
-            
-        revealed[i] = ch
-        console.print("".join(revealed), end="\r")
-        time.sleep(0.05)
-
-    console.print("\n")
-    return "".join(revealed)
+    return Path("/flag").read_text().strip()
 
 def main():
-    console = Console()
-    colors = {
-        'primary': 'magenta',
-        'secondary': 'bright_magenta'
-    }
-
-    title = display_art('Blueprint')
-    console.print(title, style="bold blue")
-    console.print(
-        Panel("[bold]Project Argus: Cryptographic Construct Activation[/bold]",
-              title="[cyan]STATUS[/cyan]",
-              subtitle="[cyan]ONLINE[/cyan]",
-              border_style="blue")
-    )
-
-    # --- Challenge Data ---
     key = os.urandom(16)
     original_message = os.urandom(32)
     original_iv = os.urandom(16)
-    
-    #target_first_block = b"cse_539_applied_"
-    target_first_block = (hashlib.sha256(open("/flag", "rb").read().strip()).hexdigest()).encode()[:16]
+    target_first_block = hashlib.sha256(Path("/flag").read_bytes().strip()).hexdigest().encode()[:16]
 
     cipher = Cipher(algorithms.AES(key), modes.CBC(original_iv))
     encryptor = cipher.encryptor()
     ciphertext = encryptor.update(original_message) + encryptor.finalize()
     original_tag = ciphertext[-16:]
 
-    challenge_text = Text.from_markup(
-        f"""
-Welcome, Engineer.
+    print("Challenge: CBC-MAC with Random IV")
+    print("Compute a new IV so that the modified message keeps the original tag.")
+    print(f"Key: {key.hex()}")
+    print(f"Original message (hex): {original_message.hex()}")
+    print(f"Original IV (hex): {original_iv.hex()}")
+    print(f"Original tag (hex): {original_tag.hex()}")
+    print(f"Target first block (hex): {target_first_block.hex()}")
 
-Your task is to forge an AES-CBC-MAC tag by manipulating the IV.
-
-[bold]Construct ID:[/bold] AES-CBC-MAC-RANDOM-IV
-[bold]Key:[/bold] {key.hex()}
-[bold]Original Message:[/bold] {original_message.hex()}
-[bold]Original IV:[/bold] {original_iv.hex()}
-[bold]Original Tag:[/bold] {original_tag.hex()}
-[bold]Target First Block:[/bold] {target_first_block}
-
-Your goal is to find a new IV that will result in the same tag for a message starting with the target first block.
-"""
-    )
-    console.print(Panel(challenge_text, title="[bold blue]Forgery Challenge[/bold blue]", border_style="blue", padding=(1, 2)))
-
-    submitted_iv_hex = Prompt.ask("[bold green]Please input the new IV (in hex)[/bold green]")
+    submitted_iv_hex = input("New IV (hex): ").strip()
 
     try:
         submitted_iv = bytes.fromhex(submitted_iv_hex)
-        
         new_message = target_first_block + original_message[16:]
         cipher = Cipher(algorithms.AES(key), modes.CBC(submitted_iv))
         encryptor = cipher.encryptor()
@@ -106,26 +38,15 @@ Your goal is to find a new IV that will result in the same tag for a message sta
         new_tag = ciphertext[-16:]
 
         if new_tag == original_tag:
-            console.print(Panel(Text.from_markup("[bold green]FORGERY SUCCESSFUL[/bold green]\n\n" 
-                                                "The tag has been successfully forged.\n\n" 
-                                                "[bold]Flag:[/bold]"),
-                                title="[bold green]STATUS: SUCCESS[/bold green]", border_style="green"))
-            flag = load_flag()
-            final_flag = shuffle_reveal(console, flag, colors)
-            console.print(Panel(f"[bold]Final Flag:[/bold] {final_flag}", border_style="green"))
+            print("Correct.")
+            print(f"Flag: {load_flag()}")
         else:
-            failure_text = Text.from_markup(f"""
-[bold red]FORGERY FAILED[/bold red]
-
-Your new tag: {new_tag.hex()}
-Original tag: {original_tag.hex()}
-
-The tags do not match.
-""")
-            console.print(Panel(failure_text, title="[bold red]STATUS: FAILURE[/bold red]", border_style="red"))
+            print("Incorrect IV.")
+            print(f"New tag:      {new_tag.hex()}")
+            print(f"Original tag: {original_tag.hex()}")
 
     except ValueError:
-        console.print(Panel("[bold red]Invalid hex input.[/bold red]", title="[bold red]INPUT ERROR[/bold red]", border_style="red"))
+        print("Invalid hex input.")
 
 if __name__ == "__main__":
     main()

@@ -1,31 +1,32 @@
 id: integrity
-name: Project Argus Integrity Wing
-    
+name: Integrity and Authentication
+description: This module covers cryptographic hash functions and message authentication codes. You will compute SHA-3 family digests, study preimage and collision resistance, and exploit practical weaknesses such as length extension, CBC-MAC misuse, and weak HMAC secrets.
+
 challenges:
   - id: sha3
-    name: The Keccak Blueprint
+    name: SHA3-256
     image: prathamgupta36/cryptomania-math-basics
   - id: shake
-    name: The Malleable Cipher
+    name: SHAKE256
     image: prathamgupta36/cryptomania-math-basics
   - id: preimage-resistance
-    name: The One-Way Cog
+    name: Preimage Resistance
     image: prathamgupta36/cryptomania-math-basics
   - id: collision-resistance
-    name: The Uniqueness Engine
+    name: Collision Resistance
     image: prathamgupta36/cryptomania-math-basics
   - id: length-extension
-    name: The Appended Secret
+    name: Length Extension
     image: prathamgupta36/cryptomania-math-basics
   - id: cbc-mac
-    name: The Chained Authenticator
+    name: CBC-MAC
     image: prathamgupta36/cryptomania-math-basics
   - id: cbc-mac-random-iv
-    name: Big Mac
+    name: CBC-MAC with Random IV
     image: prathamgupta36/cryptomania-math-basics
   - id: cbc-mac-length-extension
-    name: Forge Me
+    name: CBC-MAC Length Extension
     image: prathamgupta36/cryptomania-math-basics
   - id: cbc-mac-guess-hmac
-    name: Guess My HMAC
+    name: Weak HMAC Keys
     image: prathamgupta36/cryptomania-math-basics
