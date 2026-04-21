@@ -2,9 +2,6 @@ id: ellipticcurves
 name: ECC
 
 resources:
-  - type: header
-    content: Challenges
-
   - type: challenge
     id: eccaddition
     name: ECC Addition
@@ -40,6 +37,9 @@ resources:
     name: ECC ElGamal
     visibility:
       start: "2027-04-16T15:30:00-07:00"
+
+  - type: header
+    content: Smooth Order Attack
 
   - type: markdown
     name: Smooth Order Attack
