@@ -1,35 +1,52 @@
 id: ellipticcurves
 name: ECC
-    
-challenges:
-  - id: eccaddition
+
+resources:
+  - type: header
+    content: Challenges
+
+  - type: challenge
+    id: eccaddition
     name: ECC Addition
-    visibility: 
+    visibility:
       start: "2027-04-16T15:30:00-07:00"
-  - id: scalarmultiplication
+
+  - type: challenge
+    id: scalarmultiplication
     name: Scalar Multiplication
-    visibility: 
+    visibility:
       start: "2027-04-16T15:30:00-07:00"
-  - id: signingintro
+
+  - type: challenge
+    id: signingintro
     name: Intro to Signatures
-    visibility: 
+    visibility:
       start: "2027-04-16T15:30:00-07:00"
-  - id: sillysigner
+
+  - type: challenge
+    id: sillysigner
     name: Silly Signer
-    visibility: 
+    visibility:
       start: "2027-04-16T15:30:00-07:00"
-  - id: ecdh
+
+  - type: challenge
+    id: ecdh
     name: ECDH
-    visibility: 
+    visibility:
       start: "2027-04-16T15:30:00-07:00"
-  - id: eccelgamal
+
+  - type: challenge
+    id: eccelgamal
     name: ECC ElGamal
-    visibility: 
+    visibility:
       start: "2027-04-16T15:30:00-07:00"
+
   - type: markdown
     name: Smooth Order Attack
     file: smooth_order_attack.md
-  - id: thesmoothest
+
+  - type: challenge
+    id: thesmoothest
     name: The Smoothest
-    visibility: 
+    visibility:
       start: "2027-04-16T15:30:00-07:00"
