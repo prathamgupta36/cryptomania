@@ -6,6 +6,8 @@ award:
 
 pages:
   - lattie/coppersmith
+  - prngs/LCG
+  - elliptic/smooth_order_attack
 
 modules:
   - id: introduction
@@ -16,3 +18,5 @@ modules:
   - id: blockcipher
   - id: prngs
   - id: lattice
+  - id: ellipticcurves
+  - id: zkp

@@ -1,0 +1,16 @@
+id: zkp
+name: Zero-Knowledge Proofs
+
+challenges: 
+  - id: schnorr
+    name: Schnorr's Identification Protocol
+    visibility: 
+      start: "2027-04-16T15:30:00-07:00"
+  - id: dejaprouve
+    name: Deja-Prouve
+    visibility: 
+      start: "2027-04-16T15:30:00-07:00"
+  - id: sudoku
+    name: Sudoku Grandmaster
+    visibility: 
+      start: "2027-04-16T15:30:00-07:00"
