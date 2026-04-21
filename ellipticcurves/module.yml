@@ -43,7 +43,7 @@ resources:
 
   - type: markdown
     name: Smooth Order Attack
-    file: smooth_order_attack.md
+    file: smoothorderattack.md
 
   - type: challenge
     id: thesmoothest
