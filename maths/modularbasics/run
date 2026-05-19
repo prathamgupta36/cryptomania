@@ -155,7 +155,7 @@ class EnhancedModularTutorial:
         time.sleep(0.3)
 
         flag = self.load_flag()
-        self.shuffle_reveal(flag)
+        print(flag)
 
 if __name__ == '__main__':
     EnhancedModularTutorial().run()
