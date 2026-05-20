@@ -194,7 +194,7 @@ class EnhancedCRTTutorial:
         self.console.print(Text("Outstanding! You've mastered the CRT!", style=f"bold {self.colors['accent']}"))
         time.sleep(0.3)
         flag = self.load_flag()
-        self.shuffle_reveal(flag)
+        print(flag)
 
 if __name__=='__main__':
     EnhancedCRTTutorial().run()
