@@ -199,7 +199,7 @@ class EnhancedRSATutorial:
                                 style=f"bold {self.colors['success']}"))
         time.sleep(0.5)
         flag = self.load_flag()
-        self.shuffle_reveal(flag)
+        print(flag)
 
 if __name__ == "__main__":
     EnhancedRSATutorial().run()

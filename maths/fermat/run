@@ -192,7 +192,7 @@ class EnhancedFermatTutorial:
         self.console.print(Text("Exceptional work! You've mastered Fermat's Theorem!", style=f"bold {self.colors['success']}"))
         time.sleep(0.3)
         flag = self.load_flag()
-        self.shuffle_reveal(flag)
+        print(flag)
 
 if __name__=='__main__':
     EnhancedFermatTutorial().run()
