@@ -21,6 +21,9 @@ resources:
 - id: level4
   name: level4
   type: challenge
+- id: level5
+  name: level5
+  type: challenge
 - type: header
   content: Post LLL
 - id: lllwalkthru
